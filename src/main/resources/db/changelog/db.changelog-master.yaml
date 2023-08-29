@@ -1,5 +1,5 @@
 databaseChangeLog:
   - include:
       file: db/changelog/v.1.0.0/changeset/2023-08-29-create_tables.sql
-#  - include:
-#      file: db/changelog/v.1.0.0/changeset/next.sql
+  - include:
+      file: db/changelog/v.1.0.0/changeset/2023-08-29-add-test-data.sql

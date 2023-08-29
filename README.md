@@ -2,6 +2,9 @@
 ## Сваггер проекта
 http://localhost:8080/swagger-ui/index.html (локально)
 
+## Схема БД
+![Схема базы данных](https://github.com/Valentina810/lms/blob/main/schema.png)
+
 ## Примерный дизайн 
 https://www.figma.com/file/GoNQ6PeA0VtruUAWO1YlG1/LMS?type=design&mode=design&t=Ja79CpR8ynN0eVMP-1
 ## Мини-lms система для родителей, которые организуют семейное обучение детей дома
