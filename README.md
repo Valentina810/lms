@@ -73,7 +73,6 @@ Authorization: токен_пользователя
   "name": "Василий",
   "surname":"Петров", 
   "login":"Vasek",
-  "password":"apple",
   "email":"vasek@mail.ru",
   "dateBirth":"2000-01-01",
   "avatarUrl":"https://pgcookbook.ru/programming/vasia.jpg"
