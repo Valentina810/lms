@@ -4,6 +4,9 @@
 
 http://localhost:8080/swagger-ui/index.html (локально)
 
+Сваггер мока, развернут в посочнице, поэтому при первом запросе может быть большой таймаут
+https://mock-service-for-lms-git-valentinakolesnikova-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/swagger-ui/index.html
+
 ## Схема БД
 
 ![Схема базы данных](https://github.com/Valentina810/lms/blob/main/schema.png)
