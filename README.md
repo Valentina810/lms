@@ -29,7 +29,8 @@ https://www.figma.com/file/GoNQ6PeA0VtruUAWO1YlG1/LMS?type=design&mode=design&t=
 
 #### Запрос POST /users - создание пользователя, возвращает токен пользователя (для теста, в  UI интерфейсе регистрации пока не будет)
 
-##### Специальные заголовки: нет
+##### Специальные заголовки: 
+Content-Type : application/json
 
 ##### Тело
 
@@ -71,8 +72,8 @@ https://www.figma.com/file/GoNQ6PeA0VtruUAWO1YlG1/LMS?type=design&mode=design&t=
 #### Запрос PATCH /users/{userId} - изменение информации о пользователе
 
 ##### Специальные заголовки:
-
-Authorization: токен_пользователя
+Content-Type : application/json
+Authorization : токен_пользователя
 
 ##### Тело
 
@@ -122,7 +123,7 @@ Authorization: токен_пользователя
 
 ##### Специальные заголовки:
 
-Authorization: токен_пользователя
+Authorization : токен_пользователя
 
 ##### Тело: нет
 
@@ -167,7 +168,7 @@ Authorization: токен_пользователя
 
 ##### Специальные заголовки:
 
-Authorization: токен_пользователя
+Authorization : токен_пользователя
 
 ##### Тело: нет
 
@@ -300,8 +301,8 @@ Authorization: токен_пользователя
 #### Запрос POST /users/lesson - создание нового урока, в теле данные урока
 
 ##### Специальные заголовки:
-
-Authorization: токен_пользователя
+Content-Type : application/json
+Authorization : токен_пользователя
 
 ##### Тело:
 
@@ -355,8 +356,8 @@ Authorization: токен_пользователя
 #### Запрос PATCH /users/lesson/{lessonId} - изменение урока, в теле данные урока
 
 ##### Специальные заголовки:
-
-Authorization: токен_пользователя
+Content-Type : application/json
+Authorization : токен_пользователя
 
 ##### Тело:
 
