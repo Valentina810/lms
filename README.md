@@ -137,8 +137,8 @@ Authorization: токен_пользователя
   "login":"Vasek",
   "email":"vasek@mail.ru",
   "date_birth":"2000-01-01",
-  "date_registration":"2000-01-01",
-  "avatar_url":"https://pgcookbook.ru/programming/vasia.jpg"
+  "dateRegistration":"2000-01-01",
+  "avatarUrl":"https://pgcookbook.ru/programming/vasia.jpg"
   }
   ```
 
@@ -176,7 +176,7 @@ Authorization: токен_пользователя
 
 ```
 [{
-        "id_lesson":1,
+        "idLesson":1,
 		"subject": {
 			"idSubject": 2,
 			"name": "Математика"
@@ -188,7 +188,7 @@ Authorization: токен_пользователя
 		"checkSuccessfully": false
 	},
 	{
-	    "id_lesson":2,
+	    "idLesson":2,
 		"subject": {
 			"idSubject": 1,
 			"name": "Русский язык"
@@ -200,7 +200,7 @@ Authorization: токен_пользователя
 		"checkSuccessfully": false
 	},
 	{
-	    "id_lesson":3,
+	    "idLesson":3,
 		"subject": {
 			"idSubject": 3,
 			"name": "Технология"
@@ -212,7 +212,7 @@ Authorization: токен_пользователя
 		"checkSuccessfully": false
 	},
 	{
-	    "id_lesson":4,
+	    "idLesson":4,
 		"subject": {
 			"idSubject": 2,
 			"name": "Математика"
@@ -224,7 +224,7 @@ Authorization: токен_пользователя
 		"checkSuccessfully": false
 	},
 	{
-	    "id_lesson":5,
+	    "idLesson":5,
 		"subject": {
 			"idSubject": 3,
 			"name": "Технология"
@@ -271,7 +271,7 @@ Authorization: токен_пользователя
 
 ```
 {
-	"id_lesson": 5,
+	"idLesson": 5,
 	"subject": {
 		"idSubject": 2,
 		"name": "Математика"
@@ -279,9 +279,9 @@ Authorization: токен_пользователя
 	"date": "2023-09-04",
 	"timeStart": "10:00:00",
 	"timeEnd": "10:40:00",
-	"theoryUrl": "https://habr.com/ru/practice_url.htm",
-	"practice_url": "https://habr.com/ru/practice_url.htm",
-	"homework_url": "https://habr.com/ru/practice_url.htm",
+	"theoryUrl": "https://habr.com/ru/practiceUrl.htm",
+	"practiceUrl": "https://habr.com/ru/practiceUrl.htm",
+	"homeworkUrl": "https://habr.com/ru/practiceUrl.htm",
 	"progress": 0,
 	"checkSuccessfully": false
 }
@@ -310,9 +310,9 @@ Authorization: токен_пользователя
 	"date": "2023-09-04",
 	"timeStart": "10:00:00",
 	"timeEnd": "10:40:00",
-	"theoryUrl": "https://habr.com/ru/practice_url.htm",
-	"practice_url": "https://habr.com/ru/practice_url.htm",
-	"homework_url": "https://habr.com/ru/practice_url.htm",
+	"theoryUrl": "https://habr.com/ru/practiceUrl.htm",
+	"practiceUrl": "https://habr.com/ru/practiceUrl.htm",
+	"homeworkUrl": "https://habr.com/ru/practiceUrl.htm",
 	"progress": 0,
 	"checkSuccessfully": false
 }
@@ -326,7 +326,7 @@ Authorization: токен_пользователя
 
 ```
 {
-	"id_lesson": 5,
+	"idLesson": 5,
 	"subject": {
 		"idSubject": 2,
 		"name": "Математика"
@@ -334,9 +334,9 @@ Authorization: токен_пользователя
 	"date": "2023-09-04",
 	"timeStart": "10:00:00",
 	"timeEnd": "10:40:00",
-	"theoryUrl": "https://habr.com/ru/practice_url.htm",
-	"practice_url": "https://habr.com/ru/practice_url.htm",
-	"homework_url": "https://habr.com/ru/practice_url.htm",
+	"theoryUrl": "https://habr.com/ru/practiceUrl.htm",
+	"practiceUrl": "https://habr.com/ru/practiceUrl.htm",
+	"homeworkUrl": "https://habr.com/ru/practiceUrl.htm",
 	"progress": 0,
 	"checkSuccessfully": false
 }
@@ -365,9 +365,9 @@ Authorization: токен_пользователя
 	"date": "2023-09-04",
 	"timeStart": "10:00:00",
 	"timeEnd": "10:40:00",
-	"theoryUrl": "https://habr.com/ru/practice_url.htm",
-	"practice_url": "https://habr.com/ru/practice_url.htm",
-	"homework_url": "https://habr.com/ru/practice_url.htm",
+	"theoryUrl": "https://habr.com/ru/practiceUrl.htm",
+	"practiceUrl": "https://habr.com/ru/practiceUrl.htm",
+	"homeworkUrl": "https://habr.com/ru/practiceUrl.htm",
 	"progress": 0,
 	"checkSuccessfully": false
 }
@@ -381,7 +381,7 @@ Authorization: токен_пользователя
 
 ```
 {
-	"id_lesson": 5,
+	"idLesson": 5,
 	"subject": {
 		"idSubject": 2,
 		"name": "Математика"
@@ -389,9 +389,9 @@ Authorization: токен_пользователя
 	"date": "2023-09-04",
 	"timeStart": "10:00:00",
 	"timeEnd": "10:40:00",
-	"theoryUrl": "https://habr.com/ru/practice_url.htm",
-	"practice_url": "https://habr.com/ru/practice_url.htm",
-	"homework_url": "https://habr.com/ru/practice_url.htm",
+	"theoryUrl": "https://habr.com/ru/practiceUrl.htm",
+	"practiceUrl": "https://habr.com/ru/practiceUrl.htm",
+	"homeworkUrl": "https://habr.com/ru/practiceUrl.htm",
 	"progress": 0,
 	"checkSuccessfully": false
 }
