@@ -72,7 +72,7 @@ Content-Type : application/json
 #### Запрос PATCH /users/{userId} - изменение информации о пользователе
 
 ##### Специальные заголовки:
-Content-Type : application/json
+Content-Type : application/json  
 Authorization : токен_пользователя
 
 ##### Тело
@@ -301,7 +301,7 @@ Authorization: токен_пользователя
 #### Запрос POST /users/lesson - создание нового урока, в теле данные урока
 
 ##### Специальные заголовки:
-Content-Type : application/json
+Content-Type : application/json  
 Authorization : токен_пользователя
 
 ##### Тело:
