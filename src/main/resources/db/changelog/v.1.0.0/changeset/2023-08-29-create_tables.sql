@@ -41,3 +41,5 @@ CREATE TABLE IF NOT EXISTS lessons
     CONSTRAINT subject_id_id_subject FOREIGN KEY (subject_id)
         REFERENCES subjects (id_subject)
 );
+
+DROP TABLE users;
