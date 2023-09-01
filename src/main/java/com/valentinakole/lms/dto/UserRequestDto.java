@@ -11,29 +11,28 @@ import java.util.Date;
 @Data
 public class UserRequestDto {
 
-    @NotEmpty(message = "Name should not be empty")
-    @Size(max = 250, message = "Name should less than 250 characters")
+    @NotEmpty(message = "Имя обязательно для заполнения")
+    @Size(max = 250, message = "Имя должно быть не больше 250 знаков")
     private String name;
 
-    @Column(name = "surname")
-    @Size(max = 250, message = "Surname should less than 250 characters")
+    @Size(max = 250, message = "Фамилия должна быть не больше 250 знаков")
     private String surname;
 
-    @NotEmpty(message = "Login should not be empty")
-    @Size(max = 100, message = "Login should less than 100 characters")
+    @NotEmpty(message = "Login не должен быть пустым")
+    @Size(max = 100, message = "Login должен быть не больше 100 знаков")
     private String login;
 
-    @NotEmpty(message = "Password should not be empty")
-    @Size(max = 100, message = "Password should less than 100 characters")
+    @NotEmpty(message = "Пароль не должен быть пустым")
+    @Size(max = 100, message = "Пароль должен быть не больше 100 знаков")
     private String password;
 
-    @NotEmpty(message = "Email should not be empty")
-    @Size(max = 250, message = "Email should less than 250 characters")
-    @Email(message = "Email must have the format of an email address")
+    @NotEmpty(message = "Email обязательна для заполнения")
+    @Size(max = 250, message = "Email должен быть не больше 250 знаков")
+    @Email(message = "Email должна иметь правильный формат. Пример ivan@yandex.ru или petr@gmail.com")
     private String email;
 
     private Date dateBirth;
 
-    @Size(max = 1000, message = "Avatar URL should less than 1000 characters")
+    @Size(max = 1000, message = "Длина адреса должен быть не больше 1000 знаков")
     private String avatarUrl;
 }

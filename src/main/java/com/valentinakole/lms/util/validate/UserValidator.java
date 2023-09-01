@@ -1,4 +1,4 @@
-package com.valentinakole.lms.util;
+package com.valentinakole.lms.util.validate;
 
 import com.valentinakole.lms.exception.errors.EmailExistError;
 import com.valentinakole.lms.models.User;

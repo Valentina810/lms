@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class UserTokenDto {
 
-    @NotEmpty(message = "Token should not be empty")
-    @Size(max = 100, message = "Token should less than 100 characters")
+    @NotEmpty(message = "Токен не должен быть пустым")
+    @Size(max = 100, message = "Tокен не должен быть больше 100 знаков")
     private String token;
 }
