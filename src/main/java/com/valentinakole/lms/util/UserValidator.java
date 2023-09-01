@@ -1,7 +1,8 @@
 package com.valentinakole.lms.util;
 
+import com.valentinakole.lms.exception.errors.EmailExistError;
 import com.valentinakole.lms.models.User;
-import com.valentinakole.lms.service.UserService;
+import com.valentinakole.lms.service.UserServiceImpl;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -10,9 +11,9 @@ import java.util.Optional;
 
 @Component
 public class UserValidator implements Validator {
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
-    public UserValidator(UserService userService) {
+    public UserValidator(UserServiceImpl userService) {
         this.userService = userService;
     }
 

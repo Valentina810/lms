@@ -1,4 +1,4 @@
-package com.valentinakole.lms.util;
+package com.valentinakole.lms.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

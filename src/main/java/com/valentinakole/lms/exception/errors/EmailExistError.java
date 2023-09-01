@@ -1,4 +1,4 @@
-package com.valentinakole.lms.util;
+package com.valentinakole.lms.exception.errors;
 
 public class EmailExistError extends RuntimeException{
 
