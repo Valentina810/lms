@@ -16,7 +16,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
@@ -46,9 +52,7 @@ public class UserController {
     })
     @PostMapping
     public ResponseEntity<UserTokenDto> create(@RequestBody @Valid UserRequestDto userRequestDto, BindingResult bindingResult) {
-
         User user = validateUser.validateUser(userRequestDto, bindingResult, 0L);
-
         return ResponseEntity.status(201).body(new ModelMapper().map(userService.create(user), UserTokenDto.class));
     }
 
@@ -63,9 +67,7 @@ public class UserController {
     @PatchMapping("/{id}")
     public ResponseEntity<UserResponsePatchDto> update(@PathVariable("id") @Parameter(description = "Идентификатор user-а") long id,
                                                        @RequestBody @Valid UserRequestDto userRequestDto, BindingResult bindingResult) {
-
         User user = validateUser.validateUser(userRequestDto, bindingResult, id);
-
         return ResponseEntity.status(200).body(new ModelMapper().map(userService.update(id, user), UserResponsePatchDto.class));
     }
 }
