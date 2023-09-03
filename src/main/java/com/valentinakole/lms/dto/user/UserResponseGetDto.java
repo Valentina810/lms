@@ -1,4 +1,4 @@
-package com.valentinakole.lms.dto;
+package com.valentinakole.lms.dto.user;
 
 import lombok.Data;
 

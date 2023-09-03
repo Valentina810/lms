@@ -1,8 +1,8 @@
 package com.valentinakole.lms.util.validate;
 
 import com.valentinakole.lms.exception.errors.EmailExistError;
-import com.valentinakole.lms.models.User;
-import com.valentinakole.lms.service.UserServiceImpl;
+import com.valentinakole.lms.model.User;
+import com.valentinakole.lms.service.impl.UserServiceImpl;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;

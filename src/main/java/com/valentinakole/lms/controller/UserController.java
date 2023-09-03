@@ -1,10 +1,10 @@
 package com.valentinakole.lms.controller;
 
-import com.valentinakole.lms.dto.UserRequestDto;
-import com.valentinakole.lms.dto.UserResponseGetDto;
-import com.valentinakole.lms.dto.UserResponsePatchDto;
-import com.valentinakole.lms.dto.UserTokenDto;
-import com.valentinakole.lms.models.User;
+import com.valentinakole.lms.dto.user.UserRequestDto;
+import com.valentinakole.lms.dto.user.UserResponseGetDto;
+import com.valentinakole.lms.dto.user.UserResponsePatchDto;
+import com.valentinakole.lms.dto.user.UserTokenDto;
+import com.valentinakole.lms.model.User;
 import com.valentinakole.lms.service.UserService;
 import com.valentinakole.lms.util.validate.ValidateUser;
 import io.swagger.v3.oas.annotations.Parameter;

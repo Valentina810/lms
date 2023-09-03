@@ -1,7 +1,7 @@
 package com.valentinakole.lms.util.validate;
 
-import com.valentinakole.lms.dto.UserRequestDto;
-import com.valentinakole.lms.models.User;
+import com.valentinakole.lms.dto.user.UserRequestDto;
+import com.valentinakole.lms.model.User;
 import org.springframework.validation.BindingResult;
 
 public interface ValidateUser {

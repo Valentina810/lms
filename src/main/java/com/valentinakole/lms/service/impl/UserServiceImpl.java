@@ -1,8 +1,9 @@
-package com.valentinakole.lms.service;
+package com.valentinakole.lms.service.impl;
 
 import com.valentinakole.lms.exception.errors.UserNotFoundError;
-import com.valentinakole.lms.models.User;
-import com.valentinakole.lms.repositories.UserRepository;
+import com.valentinakole.lms.model.User;
+import com.valentinakole.lms.repository.UserRepository;
+import com.valentinakole.lms.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

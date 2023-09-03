@@ -1,6 +1,6 @@
-package com.valentinakole.lms.repositories;
+package com.valentinakole.lms.repository;
 
-import com.valentinakole.lms.models.User;
+import com.valentinakole.lms.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

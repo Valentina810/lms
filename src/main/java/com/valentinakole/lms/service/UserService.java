@@ -1,6 +1,6 @@
 package com.valentinakole.lms.service;
 
-import com.valentinakole.lms.models.User;
+import com.valentinakole.lms.model.User;
 
 import java.util.Optional;
 
