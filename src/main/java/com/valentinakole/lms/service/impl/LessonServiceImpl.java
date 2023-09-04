@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Service
 @Transactional(isolation = Isolation.SERIALIZABLE)
 @RequiredArgsConstructor
@@ -14,6 +16,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class LessonServiceImpl implements LessonService {
     @Override
     public void getLesson(long lessonId) {
+
+    }
+
+    @Override
+    public void getLessons(long userId, LocalDateTime from, LocalDateTime to) {
 
     }
 }
