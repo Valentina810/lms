@@ -1,10 +1,12 @@
 package com.valentinakole.lms.service;
 
-import java.time.LocalDateTime;
+import com.valentinakole.lms.dto.lesson.LessonDto;
+
+import java.time.LocalDate;
+import java.util.List;
 
 public interface LessonService {
     void getLesson(long lessonId);
 
-    void getLessons(long userId, LocalDateTime from, LocalDateTime to);
-
+    List<LessonDto> getLessons(long userId, LocalDate from, LocalDate to);
 }

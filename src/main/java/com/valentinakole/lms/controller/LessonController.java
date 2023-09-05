@@ -1,5 +1,6 @@
 package com.valentinakole.lms.controller;
 
+import com.valentinakole.lms.dto.lesson.LessonDto;
 import com.valentinakole.lms.service.LessonService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -13,7 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,12 +27,12 @@ public class LessonController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Получение урока по id")
-    public void getLessons(@PathVariable @Parameter(description = "Идентификатор пользователя") long userId,
-                           @RequestParam(name = "from", required = false) @Parameter(description = "Дата начала (включительно)")
-                           @DateTimeFormat(pattern = formatDate) LocalDateTime from,
-                           @RequestParam(name = "to", required = false) @Parameter(description = "Дата окончания (включительно)")
-                           @DateTimeFormat(pattern = formatDate) LocalDateTime to) {
-        lessonService.getLessons(userId, from, to);
+    @Operation(summary = "Получение уроков пользователя")
+    public List<LessonDto> getLessons(@PathVariable @Parameter(description = "Идентификатор пользователя") long userId,
+                                      @RequestParam(name = "from", required = false) @Parameter(description = "Дата начала (включительно)")
+                                      @DateTimeFormat(pattern = formatDate) LocalDate from,
+                                      @RequestParam(name = "to", required = false) @Parameter(description = "Дата окончания (включительно)")
+                                      @DateTimeFormat(pattern = formatDate) LocalDate to) {
+        return lessonService.getLessons(userId, from, to);
     }
 }
