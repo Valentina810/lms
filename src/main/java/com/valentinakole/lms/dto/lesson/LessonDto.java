@@ -35,6 +35,6 @@ public class LessonDto {
     @Schema(description = "Прогресс выполнения в % от 1 до 100", example = "10")
     private Integer progress;
 
-    @Schema(description = "ОТметка о выполнении урока", example = "false")
+    @Schema(description = "Отметка о выполнении урока", example = "false")
     private Boolean checkSuccessfully;
 }

@@ -30,16 +30,15 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     public List<LessonDto> getLessons(long userId, LocalDate from, LocalDate to) {
-        int value = LocalDate.now().getDayOfWeek().getValue();
         if (from == null) {
-            from = LocalDate.now().minusDays(value - (value - 1));
+            from = LocalDate.now().minusDays(LocalDate.now().getDayOfWeek().getValue() - 1);
         }
         if (to == null) {
             to = from.plusDays(6);
         }
         return lessonRepository.findLessonBuUserId(userId, from, to)
                 .stream()
-                .map(lessonMapper::toLessonDto).
-                collect(Collectors.toList());
+                .map(lessonMapper::toLessonDto)
+                .collect(Collectors.toList());
     }
 }
