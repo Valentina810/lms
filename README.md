@@ -24,11 +24,13 @@ https://www.figma.com/file/GoNQ6PeA0VtruUAWO1YlG1/LMS?type=design&mode=design&t=
 (заглушка для будущей авторизации).
 
 ## Эндпоинты
+
 ### Контроллер /users
 
-#### Запрос POST /users - создание пользователя, возвращает токен пользователя (для теста, в  UI интерфейсе регистрации пока не будет)
+#### Запрос POST /users - создание пользователя, возвращает пользователя (для теста, в  UI интерфейсе регистрации пока не будет)
 
-##### Специальные заголовки: 
+##### Специальные заголовки:
+
 Content-Type : application/json
 
 ##### Тело
@@ -57,7 +59,6 @@ Content-Type : application/json
   "name": "Василий",
   "surname":"Петров", 
   "login":"Vasek",
-  "password":"apple",
   "email":"vasek@mail.ru",
   "datBirth":"2000-01-01",
   "avatarUrl":"https://pgcookbook.ru/programming/vasia.jpg"
@@ -76,8 +77,8 @@ Content-Type : application/json
 #### Запрос PATCH /users/{userId} - изменение информации о пользователе
 
 ##### Специальные заголовки:
-Content-Type : application/json  
-Authorization : токен_пользователя
+
+Content-Type : application/json
 
 ##### Тело
 
@@ -105,7 +106,6 @@ Authorization : токен_пользователя
   "name": "Василий",
   "surname":"Петров", 
   "login":"Vasek",
-  "password":"apple",
   "email":"vasek@mail.ru",
   "dateBirth":"2000-01-01",
   "avatarUrl":"https://pgcookbook.ru/programming/vasia.jpg"
@@ -140,7 +140,6 @@ Authorization : токен_пользователя
   "name": "Василий",
   "surname":"Петров", 
   "login":"Vasek",
-  "password":"apple",
   "email":"vasek@mail.ru",
   "date_birth":"2000-01-01",
   "dateRegistration":"2000-01-01",
@@ -169,7 +168,6 @@ Authorization : токен_пользователя
   отвечает бэк)
 
 ##### Специальные заголовки:
-
 
 ##### Тело: нет
 
@@ -262,9 +260,7 @@ Authorization : токен_пользователя
 - % выполнения (от 0 до 100%)
 - Отметка о выполнении (выставляется при % выполнения 100 автоматически или вручную при любом % выполнения)
 
-##### Специальные заголовки:
-
-Authorization: токен_пользователя
+##### Специальные заголовки: нет
 
 ##### Тело: нет
 
@@ -302,8 +298,8 @@ Authorization: токен_пользователя
 #### Запрос POST /users/{userId}/lessons - создание нового урока, в теле данные урока
 
 ##### Специальные заголовки:
-Content-Type : application/json  
-Authorization : токен_пользователя
+
+Content-Type : application/json
 
 ##### Тело:
 
@@ -357,8 +353,8 @@ Authorization : токен_пользователя
 #### Запрос PATCH /users/{userId}/lessons/{lessonId} - изменение урока, в теле данные урока
 
 ##### Специальные заголовки:
+
 Content-Type : application/json
-Authorization : токен_пользователя
 
 ##### Тело:
 
@@ -412,9 +408,7 @@ Authorization : токен_пользователя
 
 #### Запрос DELETE /users/{userId}/lessons/{lessonId} - удаление урока
 
-##### Специальные заголовки:
-
-Authorization: токен_пользователя
+##### Специальные заголовки:нет
 
 ##### Тело: нет
 
