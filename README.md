@@ -53,8 +53,14 @@ Content-Type : application/json
 
 ```
   {
-  "id":1,
-  "token": "djoijcoeij798"
+  "id":"1",
+  "name": "Василий",
+  "surname":"Петров", 
+  "login":"Vasek",
+  "password":"apple",
+  "email":"vasek@mail.ru",
+  "datBirth":"2000-01-01",
+  "avatarUrl":"https://pgcookbook.ru/programming/vasia.jpg"
   }
 ```
 
@@ -99,6 +105,7 @@ Authorization : токен_пользователя
   "name": "Василий",
   "surname":"Петров", 
   "login":"Vasek",
+  "password":"apple",
   "email":"vasek@mail.ru",
   "dateBirth":"2000-01-01",
   "avatarUrl":"https://pgcookbook.ru/programming/vasia.jpg"
@@ -119,8 +126,6 @@ Authorization : токен_пользователя
 
 ##### Специальные заголовки:
 
-Authorization : токен_пользователя
-
 ##### Тело: нет
 
 #### Ответ
@@ -135,6 +140,7 @@ Authorization : токен_пользователя
   "name": "Василий",
   "surname":"Петров", 
   "login":"Vasek",
+  "password":"apple",
   "email":"vasek@mail.ru",
   "date_birth":"2000-01-01",
   "dateRegistration":"2000-01-01",
@@ -164,7 +170,6 @@ Authorization : токен_пользователя
 
 ##### Специальные заголовки:
 
-Authorization : токен_пользователя
 
 ##### Тело: нет
 
