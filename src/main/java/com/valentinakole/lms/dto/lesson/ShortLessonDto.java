@@ -17,7 +17,7 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Schema(description = "Сущность 'Урок'")
-public class LessonDto {
+public class ShortLessonDto {
     @Schema(description = "id", example = "1")
     private Long idLesson;
 

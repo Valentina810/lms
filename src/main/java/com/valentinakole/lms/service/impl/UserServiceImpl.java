@@ -1,6 +1,6 @@
 package com.valentinakole.lms.service.impl;
 
-import com.valentinakole.lms.exception.errors.UserNotFoundError;
+import com.valentinakole.lms.exception.errors.NotFoundException;
 import com.valentinakole.lms.model.User;
 import com.valentinakole.lms.repository.UserRepository;
 import com.valentinakole.lms.service.UserService;
@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
 
     public User findById(long id) {
         log.info("The user with id {} was found", id);
-        return userRepository.findById(id).orElseThrow(UserNotFoundError::new);
+        return userRepository.findById(id).orElseThrow(() -> new NotFoundException("Пользователь", id));
     }
 
     @Transactional
