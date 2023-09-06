@@ -22,6 +22,7 @@
         <liquibase.version>4.17.2</liquibase.version>
         <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
         <mapstruct-lombok.version>0.2.0</mapstruct-lombok.version>
+        <org.springframework.version>6.0.6</org.springframework.version>
     </properties>
     <dependencies>
         <dependency>
@@ -84,7 +85,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
-            <version>5.3.27</version>
+            <version>6.0.6</version>
         </dependency>
     </dependencies>
     <build>
