@@ -9,7 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -28,19 +29,23 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User create(User user) {
         user.setToken(String.valueOf((int) (Math.random() * 1000000000)));
-        user.setDateRegistration(new Date());
+        user.setDateRegistration(LocalDate.now());
         user = userRepository.save(user);
         log.info("The user with id {} was created", user.getId_user());
         return user;
     }
 
     @Transactional
-    public User update(long id, User updatedUser) {
-        User user = findById(id);
-        updatedUser.setId_user(id);
-        updatedUser.setToken(user.getToken());
-        updatedUser.setDateRegistration(user.getDateRegistration());
-        log.info("The user with id {} was updated", user.getId_user());
+    public User update(long id, User user) {
+        if (Objects.equals(user.getPassword(), "")) {
+            userRepository.updateWithoutPassword(user.getName(), user.getSurname(), user.getLogin(), user.getEmail(),
+                    user.getDateBirth(), user.getAvatarUrl(), id);
+        } else {
+            userRepository.updateWithPassword(user.getName(), user.getSurname(), user.getLogin(), user.getPassword(),
+                    user.getEmail(), user.getDateBirth(), user.getAvatarUrl(), id);
+        }
+        User updatedUser = findById(id);
+        log.info("The user with id {} was updated", updatedUser.getId_user());
         return userRepository.save(updatedUser);
     }
 
