@@ -1,19 +1,22 @@
 # lms
 
-## Сваггер проекта
+https://github.com/Valentina810/lms
 
-http://localhost:8080/swagger-ui/index.html (локально)
+## Ссылка на фигму  
+https://www.figma.com/file/GoNQ6PeA0VtruUAWO1YlG1/LMS?type=design&mode=design&t=Ja79CpR8ynN0eVMP-1
 
+## Сваггер реальный
+http://195.161.68.231:8080/swagger-ui/index.html
+
+## Сваггер мок-сервиса
+https://mock-service-for-lms-git-valentinakolesnikova-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/swagger-ui/index.html  
 Сваггер мока, развернут в песочнице, поэтому при первом запросе может быть большой таймаут
-https://mock-service-for-lms-git-valentinakolesnikova-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/swagger-ui/index.html
+## Доска
+https://github.com/users/Valentina810/projects/1
 
 ## Схема БД
 
 ![Схема базы данных](https://github.com/Valentina810/lms/blob/main/schema.png)
-
-## Примерный дизайн
-
-https://www.figma.com/file/GoNQ6PeA0VtruUAWO1YlG1/LMS?type=design&mode=design&t=Ja79CpR8ynN0eVMP-1
 
 ## Мини-lms система для родителей, которые организуют семейное обучение детей дома
 

@@ -19,7 +19,7 @@ public class SwaggerConfig {
                                         new Contact()
                                                 .email("valentinavasileva34@gmail.com")
                                                 .url("https://github.com/Valentina810")
-                                                .name("Valentina Kolesnikova")
+                                                .name("Valentina Kolesnikova | Roman Yudin")
                                 )
                 );
     }
