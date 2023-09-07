@@ -2,7 +2,7 @@ package com.valentinakole.lms.dto.user;
 
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 public class UserResponseGetDto {
@@ -15,13 +15,11 @@ public class UserResponseGetDto {
 
     private String login;
 
-    private String password;
-
     private String email;
 
-    private Date dateBirth;
+    private LocalDate dateBirth;
 
-    private Date dateRegistration;
+    private LocalDate dateRegistration;
 
     private String avatarUrl;
 }

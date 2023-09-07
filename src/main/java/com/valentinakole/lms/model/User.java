@@ -1,17 +1,10 @@
 package com.valentinakole.lms.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "users")
@@ -24,47 +17,33 @@ public class User {
     private long id_user;
 
     @Column(name = "name")
-//    @NotEmpty(message = "Name should not be empty")
-//    @Size(max = 250, message = "Name should less than 250 characters")
     private String name;
 
     @Column(name = "surname")
-//    @Size(max = 250, message = "Surname should less than 250 characters")
     private String surname;
 
     @Column(name = "login")
-//    @NotEmpty(message = "Login should not be empty")
-//    @Size(max = 100, message = "Login should less than 100 characters")
     private String login;
 
     @Column(name = "password")
-//    @NotEmpty(message = "Password should not be empty")
-//    @Size(max = 100, message = "Password should less than 100 characters")
     private String password;
 
     @Column(name = "token")
-//    @NotEmpty(message = "Token should not be empty")
-//    @Size(max = 100, message = "Token should less than 100 characters")
     private String token;
 
     @Column(name = "email")
-//    @NotEmpty(message = "Email should not be empty")
-//    @Size(max = 250, message = "Email should less than 250 characters")
-//    @Email
     private String email;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "date_birth")
-    private Date dateBirth;
+    private LocalDate dateBirth;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "date_registration")
-//    @NotEmpty(message = "Date registration should not be empty")
-    private Date dateRegistration;
+    private LocalDate dateRegistration;
 
     @Column(name = "avatar_url")
-//    @Size(max = 1000, message = "Avatar URL should less than 1000 characters")
     private String avatarUrl;
 }
