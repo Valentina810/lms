@@ -1,15 +1,20 @@
 package com.valentinakole.lms.controller;
 
 import com.valentinakole.lms.dto.lesson.FullLessonDto;
+import com.valentinakole.lms.dto.lesson.LessonCreateDto;
 import com.valentinakole.lms.dto.lesson.ShortLessonDto;
 import com.valentinakole.lms.service.LessonService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -43,5 +48,13 @@ public class LessonController {
                                            @RequestParam(name = "to", required = false) @Parameter(description = "Дата окончания (включительно, например 2020-09-31)")
                                            @DateTimeFormat(pattern = formatDate) LocalDate to) {
         return lessonService.getLessons(userId, from, to);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Создание нового урока для пользователя")
+    public FullLessonDto addLesson(@PathVariable long userId,
+                                   @Valid @RequestBody LessonCreateDto lessonCreateDto, BindingResult bindingResult) {
+        return lessonService.addLesson(userId, lessonCreateDto, bindingResult);
     }
 }

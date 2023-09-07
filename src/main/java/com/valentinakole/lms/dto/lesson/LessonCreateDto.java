@@ -1,7 +1,9 @@
 package com.valentinakole.lms.dto.lesson;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.valentinakole.lms.model.Subject;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,19 +20,21 @@ import java.time.LocalTime;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Schema(description = "Сущность 'Урок' (полная информация)")
-public class FullLessonDto {
-    @Schema(description = "id", example = "1")
-    private Long idLesson;
+@Schema(description = "Сущность 'Урок' (создание)")
+public class LessonCreateDto {
 
+    @NotNull(message = "Id предмета обязательно должно быть указано для создания урока")
     private Subject subject;
 
-    @Schema(description = "Дата урока", example = "2023-09-04")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @Schema(description = "Дата урока", example = "2023-09-14")
     private LocalDate date;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
     @Schema(description = "Время начала урока", example = "09:00:00")
     private LocalTime timeStart;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
     @Schema(description = "Время окончания урока", example = "09:40:00")
     private LocalTime timeEnd;
 

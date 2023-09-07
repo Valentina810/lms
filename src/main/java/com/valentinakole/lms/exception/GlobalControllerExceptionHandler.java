@@ -6,6 +6,8 @@ import com.valentinakole.lms.exception.errors.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpServerErrorException;
@@ -17,40 +19,39 @@ import java.time.LocalDateTime;
 public class GlobalControllerExceptionHandler {
     @ExceptionHandler
     private ResponseEntity<ApiError> handelBadRequestException(BadRequestError e) {
-        log.error(e.getMessage());
-        ApiError apiError = ApiError.builder()
-                .status(HttpStatus.BAD_REQUEST)
-                .message(e.getMessage())
-                .date(LocalDateTime.now()).build();
-        return ResponseEntity.status(apiError.getStatus()).body(apiError);
+        return getResponseError(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
-    private ResponseEntity<ApiError> handelUserNotFoundException(NotFoundException e) {
-        log.error(e.getMessage());
-        ApiError apiError = ApiError.builder()
-                .status(HttpStatus.NOT_FOUND)
-                .message(e.getMessage())
-                .date(LocalDateTime.now()).build();
-        return ResponseEntity.status(apiError.getStatus()).body(apiError);
+    private ResponseEntity<ApiError> handelHttpMessageNotReadableException(HttpMessageNotReadableException e) {
+        return getResponseError(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ApiError> handleMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
+        return getResponseError(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<ApiError> handelNotFoundException(NotFoundException e) {
+        return getResponseError(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler
     private ResponseEntity<ApiError> handelUserEmailException(EmailExistError e) {
-        log.error("Эта электронная почта уже существует в базе данных");
-        ApiError apiError = ApiError.builder()
-                .status(HttpStatus.CONFLICT)
-                .message("Эта электронная почта уже существует в базе данных")
-                .date(LocalDateTime.now()).build();
-        return ResponseEntity.status(apiError.getStatus()).body(apiError);
+        return getResponseError(e.getMessage(), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler
-    private ResponseEntity<ApiError> handelUserEmailException(HttpServerErrorException e) {
-        log.error(e.getMessage());
+    private ResponseEntity<ApiError> handelHttpServerErrorException(HttpServerErrorException e) {
+        return getResponseError(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    private ResponseEntity<ApiError> getResponseError(String exceptionMessage, HttpStatus badRequest) {
+        log.error(exceptionMessage);
         ApiError apiError = ApiError.builder()
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .message("Внутренняя ошибка сервера")
+                .status(badRequest)
+                .message(exceptionMessage)
                 .date(LocalDateTime.now()).build();
         return ResponseEntity.status(apiError.getStatus()).body(apiError);
     }
