@@ -21,7 +21,7 @@ import java.time.LocalTime;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Schema(description = "Сущность 'Урок' (создание)")
+@Schema(description = "Сущность 'Урок' (создание/редактирование)")
 public class LessonCreateDto {
 
     @NotNull(message = "Id предмета обязательно должно быть указано для создания урока")

@@ -69,9 +69,9 @@ public class LessonController {
 
     @DeleteMapping("{lessonId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Operation(summary = "Изменение урока")
+    @Operation(summary = "Удаление урока")
     public void deleteLesson(@PathVariable long userId,
-                                      @PathVariable long lessonId) {
+                             @PathVariable long lessonId) {
         lessonService.deleteLesson(userId, lessonId);
     }
 }
