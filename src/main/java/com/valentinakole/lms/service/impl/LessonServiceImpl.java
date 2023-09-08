@@ -64,12 +64,38 @@ public class LessonServiceImpl implements LessonService {
         Checker.checkValidationErrors(bindingResult);
         User user = userRepository.findById(userId).orElseThrow(() ->
                 new NotFoundException("Пользователь", userId));
-        Long idSubject = lessonCreateDto.getSubject().getIdSubject();
-        Subject subject = subjectRepository.findById(idSubject)
-                .orElseThrow(() -> new NotFoundException("Предмет", idSubject));
+        Long subjectId = lessonCreateDto.getSubject().getIdSubject();
+        Subject subject = subjectRepository.findById(subjectId)
+                .orElseThrow(() -> new NotFoundException("Предмет", subjectId));
         Lesson lesson = lessonMapper.toLesson(lessonCreateDto);
         lesson.setUser(user);
         lesson.setSubject(subject);
-        return lessonMapper.toFullLessonDto(lessonRepository.save(lesson));
+        FullLessonDto fullLessonDto = lessonMapper.toFullLessonDto(lessonRepository.save(lesson));
+        log.info("Добавлен новый урок: {}", fullLessonDto);
+        return fullLessonDto;
+    }
+
+    @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public FullLessonDto updateLesson(long userId, long lessonId, LessonCreateDto lessonCreateDto, BindingResult bindingResult) {
+        Checker.checkValidationErrors(bindingResult);
+        Long idSubject = lessonCreateDto.getSubject().getIdSubject();
+        subjectRepository.findById(idSubject).orElseThrow(() -> new NotFoundException("Предмет", idSubject));
+        Lesson lesson = lessonRepository.findLessonByUserId(userId, lessonId)
+                .orElseThrow(() -> new NotFoundException("Урок", lessonId));
+        Lesson updateLesson = lessonMapper.toLesson(lessonCreateDto);
+        updateLesson.setUser(lesson.getUser());
+        updateLesson.setIdLesson(lesson.getIdLesson());
+        FullLessonDto fullLessonDto = lessonMapper.toFullLessonDto(lessonRepository.save(updateLesson));
+        log.info("Обновлен урок c id {}: {}", fullLessonDto.getIdLesson(), fullLessonDto);
+        return fullLessonDto;
+    }
+
+    @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public void deleteLesson(long userId, long lessonId) {
+        lessonRepository.delete(lessonRepository.findLessonByUserId(userId, lessonId)
+                .orElseThrow(() -> new NotFoundException("Урок", lessonId)));
+        log.info("Удален урок c id {}", lessonId);
     }
 }

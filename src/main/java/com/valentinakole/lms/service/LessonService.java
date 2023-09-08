@@ -15,4 +15,7 @@ public interface LessonService {
 
     FullLessonDto addLesson(long userId, LessonCreateDto lessonCreateDto, BindingResult bindingResult);
 
+    FullLessonDto updateLesson(long userId, long lessonId,LessonCreateDto lessonCreateDto, BindingResult bindingResult);
+
+    void deleteLesson(long userId, long lessonId);
 }

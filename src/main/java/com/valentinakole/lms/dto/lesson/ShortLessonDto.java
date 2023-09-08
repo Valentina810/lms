@@ -25,6 +25,9 @@ public class ShortLessonDto {
 
     private Subject subject;
 
+    @Schema(description = "Тема урока", example = "Предлоги")
+    private String topic;
+
     @Schema(description = "Дата урока", example = "2023-09-04")
     private LocalDate date;
 

@@ -11,7 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,13 +28,13 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/users/{userId}/lessons")
+@ResponseStatus(HttpStatus.OK)
 public class LessonController {
 
     private final LessonService lessonService;
     private static final String formatDate = "yyyy-MM-dd";
 
     @GetMapping("{lessonId}")
-    @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Получение урока пользователя")
     public FullLessonDto getLesson(@PathVariable @Parameter(description = "Идентификатор пользователя") long userId,
                                    @PathVariable @Parameter(description = "Идентификатор урока") long lessonId) {
@@ -40,7 +42,6 @@ public class LessonController {
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Получение уроков пользователя")
     public List<ShortLessonDto> getLessons(@PathVariable @Parameter(description = "Идентификатор пользователя") long userId,
                                            @RequestParam(name = "from", required = false) @Parameter(description = "Дата начала (включительно, например 2023-09-08)")
@@ -56,5 +57,21 @@ public class LessonController {
     public FullLessonDto addLesson(@PathVariable long userId,
                                    @Valid @RequestBody LessonCreateDto lessonCreateDto, BindingResult bindingResult) {
         return lessonService.addLesson(userId, lessonCreateDto, bindingResult);
+    }
+
+    @PatchMapping("{lessonId}")
+    @Operation(summary = "Изменение урока")
+    public FullLessonDto updateLesson(@PathVariable long userId,
+                                      @PathVariable long lessonId,
+                                      @Valid @RequestBody LessonCreateDto lessonCreateDto, BindingResult bindingResult) {
+        return lessonService.updateLesson(userId, lessonId, lessonCreateDto, bindingResult);
+    }
+
+    @DeleteMapping("{lessonId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Изменение урока")
+    public void deleteLesson(@PathVariable long userId,
+                                      @PathVariable long lessonId) {
+        lessonService.deleteLesson(userId, lessonId);
     }
 }

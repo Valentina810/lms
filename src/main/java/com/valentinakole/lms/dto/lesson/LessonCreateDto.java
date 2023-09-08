@@ -3,6 +3,7 @@ package com.valentinakole.lms.dto.lesson;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.valentinakole.lms.model.Subject;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,15 +27,22 @@ public class LessonCreateDto {
     @NotNull(message = "Id предмета обязательно должно быть указано для создания урока")
     private Subject subject;
 
+    @NotBlank(message = "Тема урока обязательно должна быть указана для создания урока")
+    @Schema(description = "Тема урока", example = "Предлоги")
+    private String topic;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @NotNull(message = "Дата урока обязательно должна быть указана для создания урока")
     @Schema(description = "Дата урока", example = "2023-09-14")
     private LocalDate date;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
+    @NotNull(message = "Время начала урока обязательно должно быть указано для создания урока")
     @Schema(description = "Время начала урока", example = "09:00:00")
     private LocalTime timeStart;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
+    @NotNull(message = "Время окончания урока обязательно должно быть указано для создания урока")
     @Schema(description = "Время окончания урока", example = "09:40:00")
     private LocalTime timeEnd;
 
