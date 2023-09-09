@@ -7,6 +7,7 @@ import com.valentinakole.lms.exception.errors.BadRequestError;
 import com.valentinakole.lms.model.User;
 import com.valentinakole.lms.service.UserService;
 import com.valentinakole.lms.util.validate.ValidateUser;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,11 +35,13 @@ public class UserController {
     private final ValidateUser validateUser;
 
     @GetMapping("/{id}")
+    @Operation(summary = "Получение пользователя по id")
     public ResponseEntity<UserResponseGetDto> findById(@PathVariable("id") @Parameter(description = "Идентификатор user-а") long id) {
         return ResponseEntity.status(200).body(new ModelMapper().map(userService.findById(id), UserResponseGetDto.class));
     }
 
     @PostMapping
+    @Operation(summary = "Создание пользователя")
     public ResponseEntity<UserResponseDto> create(@RequestBody @Valid UserRequestDto userRequestDto, BindingResult bindingResult) {
         User user = new ModelMapper().map(userRequestDto, User.class);
         if (Objects.equals(user.getPassword(), "")) {
@@ -49,6 +52,7 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
+    @Operation(summary = "Изменение пользователя")
     public ResponseEntity<UserResponseDto> update(@PathVariable("id") @Parameter(description = "Идентификатор user-а") long id,
                                                   @RequestBody @Valid UserRequestDto userRequestDto, BindingResult bindingResult) {
         User user = new ModelMapper().map(userRequestDto, User.class);

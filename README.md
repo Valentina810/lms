@@ -3,7 +3,7 @@
 https://github.com/Valentina810/lms
 
 ## Ссылка на фигму  
-https://www.figma.com/file/GoNQ6PeA0VtruUAWO1YlG1/LMS?type=design&mode=design&t=Ja79CpR8ynN0eVMP-1
+https://www.figma.com/file/V7PLGct4lGmFJofvvbgxkw/LMS-(Copy)?type=design&node-id=0-1&mode=design&t=zOfw4q4RFrdDYrCx-0
 
 ## Сваггер реальный
 http://195.161.68.231:8080/swagger-ui/index.html

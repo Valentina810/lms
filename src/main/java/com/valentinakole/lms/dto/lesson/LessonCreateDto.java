@@ -3,6 +3,8 @@ package com.valentinakole.lms.dto.lesson;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.valentinakole.lms.model.Subject;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -56,6 +58,8 @@ public class LessonCreateDto {
     private String homeworkUrl;
 
     @Schema(description = "Прогресс выполнения в % от 1 до 100", example = "10")
+    @Max(100)
+    @Min(0)
     private Integer progress;
 
     @Schema(description = "Отметка о выполнении урока", example = "false")

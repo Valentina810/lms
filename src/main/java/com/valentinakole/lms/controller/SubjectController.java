@@ -23,7 +23,7 @@ public class SubjectController {
     private final SubjectService subjectService;
 
     @GetMapping
-    @Operation(summary = "Возвращает список учебных предметов")
+    @Operation(summary = "Получение списка учебных предметов")
     public List<SubjectDto> getSubjects() {
         return subjectService.getSubjects();
     }
