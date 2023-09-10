@@ -1,14 +1,16 @@
-package com.valentinakole.lms.service;
+package com.valentinakole.lms.service.impl;
 
-import com.valentinakole.lms.exception.errors.UserNotFoundError;
-import com.valentinakole.lms.models.User;
-import com.valentinakole.lms.repositories.UserRepository;
+import com.valentinakole.lms.exception.errors.NotFoundException;
+import com.valentinakole.lms.model.User;
+import com.valentinakole.lms.repository.UserRepository;
+import com.valentinakole.lms.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -21,25 +23,29 @@ public class UserServiceImpl implements UserService {
 
     public User findById(long id) {
         log.info("The user with id {} was found", id);
-        return userRepository.findById(id).orElseThrow(UserNotFoundError::new);
+        return userRepository.findById(id).orElseThrow(() -> new NotFoundException("Пользователь", id));
     }
 
     @Transactional
     public User create(User user) {
         user.setToken(String.valueOf((int) (Math.random() * 1000000000)));
-        user.setDateRegistration(new Date());
+        user.setDateRegistration(LocalDate.now());
         user = userRepository.save(user);
         log.info("The user with id {} was created", user.getId_user());
         return user;
     }
 
     @Transactional
-    public User update(long id, User updatedUser) {
-        User user = findById(id);
-        updatedUser.setId_user(id);
-        updatedUser.setToken(user.getToken());
-        updatedUser.setDateRegistration(user.getDateRegistration());
-        log.info("The user with id {} was updated", user.getId_user());
+    public User update(long id, User user) {
+        if (Objects.equals(user.getPassword(), "")) {
+            userRepository.updateWithoutPassword(user.getName(), user.getSurname(), user.getLogin(), user.getEmail(),
+                    user.getDateBirth(), user.getAvatarUrl(), id);
+        } else {
+            userRepository.updateWithPassword(user.getName(), user.getSurname(), user.getLogin(), user.getPassword(),
+                    user.getEmail(), user.getDateBirth(), user.getAvatarUrl(), id);
+        }
+        User updatedUser = findById(id);
+        log.info("The user with id {} was updated", updatedUser.getId_user());
         return userRepository.save(updatedUser);
     }
 
