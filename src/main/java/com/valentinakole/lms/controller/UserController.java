@@ -6,6 +6,7 @@ import com.valentinakole.lms.dto.user.UserResponseGetDto;
 import com.valentinakole.lms.exception.errors.BadRequestError;
 import com.valentinakole.lms.model.User;
 import com.valentinakole.lms.service.UserService;
+import com.valentinakole.lms.util.validate.ValidateAvatarUrl;
 import com.valentinakole.lms.util.validate.ValidatePathVariable;
 import com.valentinakole.lms.util.validate.ValidateUser;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,6 +19,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.util.Objects;
 
 @Slf4j
@@ -30,6 +33,8 @@ public class UserController {
     private final ValidateUser validateUser;
     private final ValidatePathVariable validatePathVariable;
 
+    private final ValidateAvatarUrl validateAvatarUrl;
+
     @GetMapping("/{id}")
     @Operation(summary = "Получение пользователя по id")
     public ResponseEntity<UserResponseGetDto> findById(@PathVariable("id") @Parameter(description = "Идентификатор user-а") long id) {
@@ -39,11 +44,12 @@ public class UserController {
 
     @PostMapping
     @Operation(summary = "Создание пользователя")
-    public ResponseEntity<UserResponseDto> create(@RequestBody @Valid UserRequestDto userRequestDto, BindingResult bindingResult) {
+    public ResponseEntity<UserResponseDto> create(@RequestBody @Valid UserRequestDto userRequestDto, BindingResult bindingResult) throws MalformedURLException, URISyntaxException {
         User user = new ModelMapper().map(userRequestDto, User.class);
         if (Objects.equals(user.getPassword(), "")) {
             throw new BadRequestError("Пароль не должен быть пустым");
         }
+        validateAvatarUrl.isValidURL(user.getAvatarUrl());
         validateUser.validateUser(user, bindingResult);
         return ResponseEntity.status(201).body(new ModelMapper().map(userService.create(user), UserResponseDto.class));
     }
@@ -55,6 +61,7 @@ public class UserController {
         validatePathVariable.check(id);
         User user = new ModelMapper().map(userRequestDto, User.class);
         user.setId_user(id);
+        validateAvatarUrl.isValidURL(user.getAvatarUrl());
         validateUser.validateUser(user, bindingResult);
         return ResponseEntity.status(200).body(new ModelMapper().map(userService.update(id, user), UserResponseDto.class));
     }

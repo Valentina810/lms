@@ -1,5 +1,6 @@
 package com.valentinakole.lms.service.impl;
 
+import com.valentinakole.lms.exception.errors.BadRequestError;
 import com.valentinakole.lms.exception.errors.NotFoundException;
 import com.valentinakole.lms.model.User;
 import com.valentinakole.lms.repository.UserRepository;
@@ -9,6 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Optional;
