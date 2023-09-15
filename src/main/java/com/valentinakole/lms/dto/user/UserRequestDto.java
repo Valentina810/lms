@@ -1,14 +1,14 @@
 package com.valentinakole.lms.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
@@ -41,13 +41,11 @@ public class UserRequestDto {
     @Schema(description = "Email", example = "irinasav@yandex.ru")
     private String email;
 
-//    @Pattern(message = "BirthDate", regexp = "^[0-9]{4}[-][0-9]{2}[-][0-9]{2}$")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @Pattern(message = "dateBirth не правильный формат даты, пример '2000-01-01' ", regexp = "^[0-9]{4}-[0-9]{2}-[0-9]{2}$")
     @Schema(description = "Дата рождения", example = "2000-09-14")
-    @Past(message = "День рождения не может быть позже сегодняшнего дня")
-    private LocalDate dateBirth;
+    private String dateBirth;
 
     @Size(max = 1000, message = "Длина адреса должен быть не больше 1000 знаков")
-    @Schema(description = "Урл, по котрому хранится аватар", example = "https://habr.com/ru/irinasav.jpg")
+    @Schema(description = "Урл, по которому хранится аватар", example = "https://habr.com/ru/irinasav.jpg")
     private String avatarUrl;
 }

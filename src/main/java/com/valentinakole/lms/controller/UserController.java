@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Slf4j
@@ -32,7 +33,6 @@ public class UserController {
     private final UserService userService;
     private final ValidateUser validateUser;
     private final ValidatePathVariable validatePathVariable;
-
     private final ValidateAvatarUrl validateAvatarUrl;
 
     @GetMapping("/{id}")
@@ -44,13 +44,14 @@ public class UserController {
 
     @PostMapping
     @Operation(summary = "Создание пользователя")
-    public ResponseEntity<UserResponseDto> create(@RequestBody @Valid UserRequestDto userRequestDto, BindingResult bindingResult) throws MalformedURLException, URISyntaxException {
+    public ResponseEntity<UserResponseDto> create(@RequestBody @Valid UserRequestDto userRequestDto, BindingResult bindingResult) {
         User user = new ModelMapper().map(userRequestDto, User.class);
+        validateAvatarUrl.isValidURL(user.getAvatarUrl());
+        validateUser.validateUser(user, bindingResult);
+        user.setDateBirth(LocalDate.parse(userRequestDto.getDateBirth()));
         if (Objects.equals(user.getPassword(), "")) {
             throw new BadRequestError("Пароль не должен быть пустым");
         }
-        validateAvatarUrl.isValidURL(user.getAvatarUrl());
-        validateUser.validateUser(user, bindingResult);
         return ResponseEntity.status(201).body(new ModelMapper().map(userService.create(user), UserResponseDto.class));
     }
 
