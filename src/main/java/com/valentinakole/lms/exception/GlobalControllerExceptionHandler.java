@@ -32,9 +32,7 @@ public class GlobalControllerExceptionHandler {
 
     @ExceptionHandler
     private ResponseEntity<ApiError> handelHttpMessageNotReadableException(HttpMessageNotReadableException e) {
-        return getResponseError(
-                "Неверная структура объекта: проверьте скобки, запятые и названия полей и формат тип date: 'yyyy-MM-dd' ",
-                HttpStatus.BAD_REQUEST);
+        return getResponseError("Неверная структура объекта: проверьте скобки, запятые и названия полей", HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler

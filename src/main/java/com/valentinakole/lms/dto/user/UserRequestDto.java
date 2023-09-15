@@ -1,6 +1,7 @@
 package com.valentinakole.lms.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -14,12 +15,13 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Schema(description = "Сущность 'Пользователь' (создание/редактирование)")
 public class UserRequestDto {
-
+    @Pattern(message = "Имя должно содержать только буквы", regexp = "^[a-zA-Zа-яА-Я]{0,250}$")
     @NotEmpty(message = "Имя обязательно для заполнения")
     @Size(max = 250, message = "Имя должно быть не больше 250 знаков")
     @Schema(description = "Имя", example = "Ирина")
     private String name;
 
+    @Pattern(message = "Фамилия должна содержать только буквы", regexp = "^[a-zA-Zа-яА-Я]{0,250}$")
     @Size(max = 250, message = "Фамилия должна быть не больше 250 знаков")
     @Schema(description = "Фамилия", example = "Савельева")
     private String surname;
@@ -39,9 +41,10 @@ public class UserRequestDto {
     @Schema(description = "Email", example = "irinasav@yandex.ru")
     private String email;
 
+//    @Pattern(message = "BirthDate", regexp = "^[0-9]{4}[-][0-9]{2}[-][0-9]{2}$")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Schema(description = "Дата рождения", example = "2000-09-14")
-    @Past
+    @Past(message = "День рождения не может быть позже сегодняшнего дня")
     private LocalDate dateBirth;
 
     @Size(max = 1000, message = "Длина адреса должен быть не больше 1000 знаков")
