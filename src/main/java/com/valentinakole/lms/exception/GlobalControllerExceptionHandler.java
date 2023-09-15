@@ -5,6 +5,7 @@ import com.valentinakole.lms.exception.errors.EmailExistError;
 import com.valentinakole.lms.exception.errors.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.boot.json.JsonParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -20,13 +21,20 @@ import java.time.LocalDateTime;
 @Slf4j
 public class GlobalControllerExceptionHandler {
     @ExceptionHandler
+    private ResponseEntity<ApiError> handelHttpMessageNotReadableException(JsonParseException e) {
+        return getResponseError(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
     private ResponseEntity<ApiError> handelBadRequestException(BadRequestError e) {
         return getResponseError(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
     private ResponseEntity<ApiError> handelHttpMessageNotReadableException(HttpMessageNotReadableException e) {
-        return getResponseError(e.getMessage(), HttpStatus.BAD_REQUEST);
+        return getResponseError(
+                "Неверная структура объекта: проверьте скобки, запятые и названия полей и формат тип date: 'yyyy-MM-dd' ",
+                HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler

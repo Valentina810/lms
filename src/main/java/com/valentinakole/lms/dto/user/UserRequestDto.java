@@ -2,9 +2,7 @@ package com.valentinakole.lms.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -43,6 +41,7 @@ public class UserRequestDto {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Schema(description = "Дата рождения", example = "2000-09-14")
+    @Past
     private LocalDate dateBirth;
 
     @Size(max = 1000, message = "Длина адреса должен быть не больше 1000 знаков")
