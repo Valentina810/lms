@@ -14,32 +14,28 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ValidateUserImplTest {
-
     @InjectMocks
     private ValidateUserImpl validateUser;
-
     @Mock
     private BindingResult bindingResult;
-
     @Mock
-    private UserValidator userValidator;
-
+    private ValidateUserEmailExist validateUserEmailExist;
     @Mock
     private User user;
 
     @Test
     void validateUser_whenUserNotHasErrors_thenReturnUser() {
-        doNothing().when(userValidator).validate(user, bindingResult);
+        doNothing().when(validateUserEmailExist).validate(user, bindingResult);
 
         Assertions.assertEquals(validateUser.validateUser(user, bindingResult), user);
-        verify(userValidator).validate(user, bindingResult);
+        verify(validateUserEmailExist).validate(user, bindingResult);
     }
 
     @Test
     void validateUser_whenUserHasErrorsInUserValidator_thenThrowBadRequestError() {
-        doThrow(BadRequestError.class).when(userValidator).validate(user, bindingResult);
+        doThrow(BadRequestError.class).when(validateUserEmailExist).validate(user, bindingResult);
 
-        Assertions.assertThrows(BadRequestError.class, () -> userValidator.validate(user, bindingResult));
-        verify(userValidator).validate(user, bindingResult);
+        Assertions.assertThrows(BadRequestError.class, () -> validateUserEmailExist.validate(user, bindingResult));
+        verify(validateUserEmailExist).validate(user, bindingResult);
     }
 }

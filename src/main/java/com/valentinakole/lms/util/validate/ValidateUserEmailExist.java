@@ -2,7 +2,9 @@ package com.valentinakole.lms.util.validate;
 
 import com.valentinakole.lms.exception.errors.EmailExistError;
 import com.valentinakole.lms.model.User;
+import com.valentinakole.lms.service.UserService;
 import com.valentinakole.lms.service.impl.UserServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -10,12 +12,9 @@ import org.springframework.validation.Validator;
 import java.util.Optional;
 
 @Component
-public class UserValidator implements Validator {
-    private final UserServiceImpl userService;
-
-    public UserValidator(UserServiceImpl userService) {
-        this.userService = userService;
-    }
+@RequiredArgsConstructor
+public class ValidateUserEmailExist implements Validator {
+    private final UserService userService;
 
     @Override
     public boolean supports(Class<?> aClass) {

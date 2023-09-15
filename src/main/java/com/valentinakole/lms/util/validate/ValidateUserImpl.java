@@ -8,12 +8,12 @@ import org.springframework.validation.BindingResult;
 @Component
 @RequiredArgsConstructor
 public class ValidateUserImpl implements ValidateUser {
-    private final UserValidator userValidator;
+    private final ValidateUserEmailExist validateUserEmailExist;
 
     @Override
     public User validateUser(User user, BindingResult bindingResult) {
         Checker.checkValidationErrors(bindingResult);
-        userValidator.validate(user, bindingResult);
+        validateUserEmailExist.validate(user, bindingResult);
         return user;
     }
 }
