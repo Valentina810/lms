@@ -31,6 +31,7 @@ public class LessonCreateDto {
     private Subject subject;
 
     @NotBlank(message = "Тема урока обязательна для заполнения")
+    @Size(max = 500, message = "Название темы урока должна быть не больше 500 знаков")
     @Schema(description = "Тема урока", example = "Предлоги")
     private String topic;
 
