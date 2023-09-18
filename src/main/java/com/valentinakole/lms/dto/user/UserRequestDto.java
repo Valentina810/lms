@@ -4,12 +4,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -21,14 +18,17 @@ import java.time.LocalDate;
 @Schema(description = "Сущность 'Пользователь' (создание/редактирование)")
 public class UserRequestDto {
 
+    @Pattern(message = "Имя должно содержать только буквы", regexp = "^[a-zA-Zа-яА-Я]{0,250}$")
     @NotEmpty(message = "Имя обязательно для заполнения")
     @Size(max = 250, message = "Имя должно быть не больше 250 знаков")
     @Schema(description = "Имя", example = "Ирина")
     private String name;
 
+    @Pattern(message = "Фамилия должна содержать только буквы", regexp = "^[a-zA-Zа-яА-Я]{0,250}$")
     @Size(max = 250, message = "Фамилия должна быть не больше 250 знаков")
     @Schema(description = "Фамилия", example = "Савельева")
     private String surname;
+
 
     @NotEmpty(message = "Login не должен быть пустым")
     @Size(max = 100, message = "Login должен быть не больше 100 знаков")
