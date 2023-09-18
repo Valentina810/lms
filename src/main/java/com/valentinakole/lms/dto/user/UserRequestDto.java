@@ -49,7 +49,8 @@ public class UserRequestDto {
     @Schema(description = "Дата рождения", example = "2000-09-14")
     private LocalDate dateBirth;
 
+    @Pattern( message = "Url не правильный формат, пример https://habr.com/",regexp = "^https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$")
     @Size(max = 1000, message = "Длина адреса должен быть не больше 1000 знаков")
-    @Schema(description = "Урл, по котрому хранится аватар", example = "https://habr.com/ru/irinasav.jpg")
+    @Schema(description = "Урл, по которому хранится аватар", example = "https://habr.com/ru/irinasav.jpg")
     private String avatarUrl;
 }
