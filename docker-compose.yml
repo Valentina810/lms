@@ -1,9 +1,10 @@
 version: '3.8'
 services:
-  server:
-    build: ./
-    image: lms
-    container_name: lms
+  client-backend:
+    image: client:0.0.1
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
     depends_on:
