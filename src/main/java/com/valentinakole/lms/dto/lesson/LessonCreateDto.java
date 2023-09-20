@@ -32,6 +32,7 @@ public class LessonCreateDto {
 
     @NotBlank(message = "Тема урока обязательна для заполнения")
     @Schema(description = "Тема урока", example = "Предлоги")
+    @Size(max = 500, message = "Тема урока должна быть не больше 500 знаков")
     private String topic;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
