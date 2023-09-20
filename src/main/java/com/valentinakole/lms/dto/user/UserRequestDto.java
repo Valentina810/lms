@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.validator.constraints.URL;
 
 import java.time.LocalDate;
 
@@ -34,7 +35,6 @@ public class UserRequestDto {
     @Schema(description = "Фамилия", example = "Савельева")
     private String surname;
 
-
     @NotBlank(message = "Login не должен быть пустым")
     @Size(max = 100, message = "Login должен быть не больше 100 знаков")
     @Schema(description = "Логин", example = "irinasav")
@@ -55,7 +55,7 @@ public class UserRequestDto {
     @Schema(description = "Дата рождения", example = "2000-09-14")
     private LocalDate dateBirth;
 
-    @Pattern(message = "Url не правильный формат, пример https://habr.com/", regexp = "^https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$")
+    @URL(message = "Неправильный формат URL, пример https://habr.com/")
     @Size(max = 1000, message = "Длина адреса должен быть не больше 1000 знаков")
     @Schema(description = "Урл, по которому хранится аватар", example = "https://habr.com/ru/irinasav.jpg")
     private String avatarUrl;
