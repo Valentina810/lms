@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Slf4j
@@ -44,10 +45,11 @@ public class UserController {
     @Operation(summary = "Создание пользователя")
     public ResponseEntity<UserResponseDto> create(@RequestBody @Valid UserRequestDto userRequestDto, BindingResult bindingResult) {
         User user = new ModelMapper().map(userRequestDto, User.class);
+        user.setDateBirth(LocalDate.parse(userRequestDto.getDateBirth()));
+        validateUser.validateUser(user, bindingResult);
         if (Objects.equals(user.getPassword(), "")) {
             throw new BadRequestError("Пароль не должен быть пустым");
         }
-        validateUser.validateUser(user, bindingResult);
         return ResponseEntity.status(201).body(new ModelMapper().map(userService.create(user), UserResponseDto.class));
     }
 
@@ -57,6 +59,7 @@ public class UserController {
                                                   @RequestBody @Valid UserRequestDto userRequestDto, BindingResult bindingResult) {
         User user = new ModelMapper().map(userRequestDto, User.class);
         user.setId_user(id);
+        user.setDateBirth(LocalDate.parse(userRequestDto.getDateBirth()));
         validateUser.validateUser(user, bindingResult);
         return ResponseEntity.status(200).body(new ModelMapper().map(userService.update(id, user), UserResponseDto.class));
     }
