@@ -42,7 +42,7 @@ public class GlobalControllerExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<ApiError> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
-        return getResponseError(e.getMessage(), HttpStatus.BAD_REQUEST);
+        return getResponseError("Неверный параметр запроса: проверьте параметры", HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
