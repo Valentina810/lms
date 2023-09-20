@@ -2,6 +2,7 @@ package com.valentinakole.lms.dto.lesson;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.valentinakole.lms.model.Subject;
+import com.valentinakole.lms.util.validate.ValidationMessage;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
@@ -66,9 +67,9 @@ public class LessonCreateDto {
     @Schema(description = "Ссылка на домашнюю работу к уроку", example = "https://habr.com/ru/homeworkUrl.htm")
     private String homeworkUrl;
 
-    @PositiveOrZero(message = "Прогресс должен быть числом от 0 до 100")
+    @PositiveOrZero(message = ValidationMessage.VALIDATION_PROGRESS_MESSAGE)
     @Schema(description = "Прогресс выполнения в % от 1 до 100", example = "10")
-    @Max(100)
+    @Max(value = 100, message = ValidationMessage.VALIDATION_PROGRESS_MESSAGE)
     private Integer progress;
 
     @Schema(description = "Отметка о выполнении урока", example = "false")
