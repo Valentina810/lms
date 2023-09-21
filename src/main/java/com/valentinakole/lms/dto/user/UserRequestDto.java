@@ -1,10 +1,9 @@
 package com.valentinakole.lms.dto.user;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.valentinakole.lms.util.annotation.ValidDate;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -13,8 +12,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.URL;
-
-import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -50,10 +47,9 @@ public class UserRequestDto {
     @Schema(description = "Email", example = "irinasav@yandex.ru")
     private String email;
 
-    @Past(message = "День рождения должен быть не позднее сегодняшнего дня")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @ValidDate(past = true)
     @Schema(description = "Дата рождения", example = "2000-09-14")
-    private LocalDate dateBirth;
+    private String dateBirth;
 
     @URL(message = "Неправильный формат URL, пример https://habr.com/")
     @Size(max = 1000, message = "Длина адреса должен быть не больше 1000 знаков")
