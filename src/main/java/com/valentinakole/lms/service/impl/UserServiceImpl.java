@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
         user.setToken(String.valueOf((int) (Math.random() * 1000000000)));
         user.setDateRegistration(LocalDate.now());
         user = userRepository.save(user);
-        log.info("The user with id {} was created", user.getId_user());
+        log.info("The user with id {} was created", user.getUserId());
         return user;
     }
 
@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
                     user.getEmail(), user.getDateBirth(), user.getAvatarUrl(), id);
         }
         User updatedUser = findById(id);
-        log.info("The user with id {} was updated", updatedUser.getId_user());
+        log.info("The user with id {} was updated", updatedUser.getUserId());
         return userRepository.save(updatedUser);
     }
 

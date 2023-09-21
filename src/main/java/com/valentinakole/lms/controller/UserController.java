@@ -4,6 +4,7 @@ import com.valentinakole.lms.dto.user.UserRequestDto;
 import com.valentinakole.lms.dto.user.UserResponseDto;
 import com.valentinakole.lms.dto.user.UserResponseGetDto;
 import com.valentinakole.lms.exception.errors.BadRequestError;
+import com.valentinakole.lms.mapper.UserMapper;
 import com.valentinakole.lms.model.User;
 import com.valentinakole.lms.service.UserService;
 import com.valentinakole.lms.util.validate.ValidateUser;
@@ -12,7 +13,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,33 +34,32 @@ public class UserController {
 
     private final UserService userService;
     private final ValidateUser validateUser;
+    private final UserMapper userMapper;
 
     @GetMapping("/{id}")
     @Operation(summary = "Получение пользователя по id")
     public ResponseEntity<UserResponseGetDto> findById(@PathVariable("id") @Parameter(description = "Идентификатор user-а") long id) {
-        return ResponseEntity.status(200).body(new ModelMapper().map(userService.findById(id), UserResponseGetDto.class));
+        return ResponseEntity.status(200).body(userMapper.toUserResponseGetDto(userService.findById(id)));
     }
 
     @PostMapping
     @Operation(summary = "Создание пользователя")
     public ResponseEntity<UserResponseDto> create(@RequestBody @Valid UserRequestDto userRequestDto, BindingResult bindingResult) {
-        User user = new ModelMapper().map(userRequestDto, User.class);
-        user.setDateBirth(LocalDate.parse(userRequestDto.getDateBirth()));
+        User user = userMapper.toUser(userRequestDto);
         if (Objects.equals(user.getPassword(), "")) {
             throw new BadRequestError("Пароль не должен быть пустым");
         }
         validateUser.validateUser(user, bindingResult);
-        return ResponseEntity.status(201).body(new ModelMapper().map(userService.create(user), UserResponseDto.class));
+        return ResponseEntity.status(201).body(userMapper.toUserResponseDto(userService.create(user)));
     }
 
     @PatchMapping("/{id}")
     @Operation(summary = "Изменение пользователя")
     public ResponseEntity<UserResponseDto> update(@PathVariable("id") @Parameter(description = "Идентификатор user-а") long id,
                                                   @RequestBody @Valid UserRequestDto userRequestDto, BindingResult bindingResult) {
-        User user = new ModelMapper().map(userRequestDto, User.class);
-        user.setId_user(id);
-        user.setDateBirth(LocalDate.parse(userRequestDto.getDateBirth()));
+        User user = userMapper.toUser(userRequestDto);
+        user.setUserId(id);
         validateUser.validateUser(user, bindingResult);
-        return ResponseEntity.status(200).body(new ModelMapper().map(userService.update(id, user), UserResponseDto.class));
+        return ResponseEntity.status(200).body(userMapper.toUserResponseDto(userService.update(id, user)));
     }
 }

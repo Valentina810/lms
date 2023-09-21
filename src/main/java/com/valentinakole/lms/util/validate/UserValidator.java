@@ -26,7 +26,7 @@ public class UserValidator implements Validator {
     public void validate(Object o, Errors errors) {
         User user = (User) o;
         Optional<User> optional = userService.findByEmail(user.getEmail());
-        if (optional.isPresent() && optional.get().getId_user() != user.getId_user()) {
+        if (optional.isPresent() && optional.get().getUserId() != user.getUserId()) {
             errors.rejectValue("email", "", "This email already taken");
             throw new EmailExistError("Эта электронная почта уже существует в базе данных");
         }

@@ -13,14 +13,14 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
     @Query(value = "from Lesson as les " +
             "join fetch les.user use " +
             "join fetch les.subject " +
-            "where use.id_user = ?1 " +
+            "where use.userId = ?1 " +
             "and les.idLesson=?2 ")
     Optional<Lesson> findLessonByUserId(long userId, long lessonId);
 
     @Query(value = "from Lesson as les " +
             "join fetch les.user use " +
             "join fetch les.subject " +
-            "where use.id_user = ?1 " +
+            "where use.userId = ?1 " +
             "and les.date>= ?2 and les.date<= ?3 " +
             "order by les.date asc,les.timeStart asc ")
     List<Lesson> findLessonsByUserId(long userId, LocalDate from, LocalDate to);
