@@ -57,7 +57,7 @@ public class UserController {
     public ResponseEntity<UserResponseDto> update(@PathVariable("id") @Parameter(description = "Идентификатор user-а") long id,
                                                   @RequestBody @Valid UserRequestDto userRequestDto, BindingResult bindingResult) {
         User user = userMapper.toUser(userRequestDto);
-        user.setId_user(id);
+        user.setUserId(id);
         validateUser.validateUser(user, bindingResult);
         return ResponseEntity.status(200).body(userMapper.toUserResponseDto(userService.update(id, user)));
     }
