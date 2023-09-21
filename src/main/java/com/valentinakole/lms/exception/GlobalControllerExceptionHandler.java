@@ -15,6 +15,7 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 
 @RestControllerAdvice
 @Slf4j
@@ -26,6 +27,12 @@ public class GlobalControllerExceptionHandler {
 
     @ExceptionHandler
     private ResponseEntity<ApiError> handelHttpMessageNotReadableException(HttpMessageNotReadableException e) {
+        return getResponseError("Неверная структура объекта: проверьте скобки, запятые и названия полей",
+                HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<ApiError> handelDateTimeParseException(DateTimeParseException e) {
         return getResponseError("Неверная структура объекта: проверьте скобки, запятые и названия полей",
                 HttpStatus.BAD_REQUEST);
     }
