@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -34,6 +35,7 @@ public class LessonCreateDto {
 
     @NotBlank(message = "Тема урока обязательна для заполнения")
     @Schema(description = "Тема урока", example = "Предлоги")
+    @Pattern(message = "Имя должно содержать только буквы", regexp = "^[a-zA-Zа-яА-Я]{0,500}$")
     @Size(max = 500, message = "Тема урока должна быть не больше 500 знаков")
     private String topic;
 
