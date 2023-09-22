@@ -1,6 +1,4 @@
-# lms
-
-https://github.com/Valentina810/lms
+# Групповой пет-проект lms
 
 ## Участники команды
 
@@ -17,22 +15,21 @@ https://github.com/Valentina810/lms
 
 - [Евгения](https://github.com/janekomarovskaja)
 
-## Ссылка на фигму
-
-https://www.figma.com/file/V7PLGct4lGmFJofvvbgxkw/LMS-(Copy)?type=design&node-id=0-1&mode=design&t=zOfw4q4RFrdDYrCx-0
-
-## Сваггер реальный
+## Сваггер (бэкенд)
 
 http://195.161.68.231:8080/swagger-ui/index.html
 
-## Сваггер мок-сервиса
+## Репозиторий фронтенда
 
-https://mock-service-for-lms-git-valentinakolesnikova-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/swagger-ui/index.html  
-Сваггер мока, развернут в песочнице, поэтому при первом запросе может быть большой таймаут
+ https://github.com/AnnaSog/LMS
 
 ## Доска
 
 https://github.com/users/Valentina810/projects/1
+
+## Ссылка на макеты
+
+https://www.figma.com/file/V7PLGct4lGmFJofvvbgxkw/LMS-(Copy)?type=design&node-id=0-1&mode=design&t=zOfw4q4RFrdDYrCx-0
 
 ## Схема БД
 
@@ -580,6 +577,7 @@ Content-Type : application/json
   сообщать об этом и урок не создавать)
 - добавить проверку что время начала урока не раньше его окончания
 - добавить вывод в интерефейс по дням, неделям, месяцам (?)
-- раскрасить уроки в интерфейсе в зависимости от прогресса и статуса выполнения
 - в списке предметов сделать сортировку по алфавиту (метод GET /subjects)
 - в логине пользователя ограничить символы: можно использовать только английские буквы и цифры
+- добавить сохранение логов на сервере в файл (бэкенд)
+- реализовать обновление сущностей с помощью PATCH запросов в случае если приходит от одного до полного количества полей объекта (и для пользователя и для урока)
