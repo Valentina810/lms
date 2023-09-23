@@ -37,13 +37,14 @@ public class LessonServiceImpl implements LessonService {
     @Override
     public FullLessonDto getLesson(long userId, long lessonId) {
         FullLessonDto fullLessonDto = lessonMapper.toFullLessonDto(lessonRepository.findLessonByUserId(userId, lessonId).orElseThrow(() ->
-                new NotFoundException("Урок", lessonId)));
+                new NotFoundException("У пользователя с id "+userId+" не найден урок с id "+lessonId)));
         log.info("Получен урок {}", fullLessonDto);
         return fullLessonDto;
     }
 
     @Override
     public List<ShortLessonDto> getLessons(long userId, LocalDate from, LocalDate to) {
+        userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Пользователь", userId));
         if (from == null) {
             from = LocalDate.now().minusDays(LocalDate.now().getDayOfWeek().getValue() - 1);
         }

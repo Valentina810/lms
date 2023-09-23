@@ -20,31 +20,16 @@ import java.time.format.DateTimeParseException;
 @RestControllerAdvice
 @Slf4j
 public class GlobalControllerExceptionHandler {
-    @ExceptionHandler
-    private ResponseEntity<ApiError> handelBadRequestException(BadRequestError e) {
+    @ExceptionHandler({BadRequestError.class,MethodArgumentNotValidException.class,
+            ConstraintViolationException.class})
+    private ResponseEntity<ApiError> handelBadRequestException(RuntimeException e) {
         return getResponseError(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler
-    private ResponseEntity<ApiError> handelHttpMessageNotReadableException(HttpMessageNotReadableException e) {
+    @ExceptionHandler({HttpMessageNotReadableException.class,DateTimeParseException.class})
+    private ResponseEntity<ApiError> handelHttpMessageNotReadableException() {
         return getResponseError("Неверная структура объекта: проверьте скобки, запятые и названия полей",
                 HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
-    private ResponseEntity<ApiError> handelDateTimeParseException(DateTimeParseException e) {
-        return getResponseError("Неверная структура объекта: проверьте скобки, запятые и названия полей",
-                HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<ApiError> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        return getResponseError(e.getMessage(), HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
-    private ResponseEntity<ApiError> handelHttpServerErrorException(ConstraintViolationException e) {
-        return getResponseError(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
