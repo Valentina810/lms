@@ -94,6 +94,7 @@ public class LessonServiceImpl implements LessonService {
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void deleteLesson(long userId, long lessonId) {
+        userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Пользователь", userId));
         lessonRepository.delete(lessonRepository.findLessonByUserId(userId, lessonId)
                 .orElseThrow(() -> new NotFoundException("Урок", lessonId)));
         log.info("Удален урок c id {}", lessonId);
