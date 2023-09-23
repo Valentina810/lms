@@ -34,6 +34,10 @@ public class User {
     @Column(name = "email")
     private String email;
 
+    @Column(name="role")
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "date_birth")

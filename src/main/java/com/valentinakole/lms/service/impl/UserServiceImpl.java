@@ -1,6 +1,7 @@
 package com.valentinakole.lms.service.impl;
 
 import com.valentinakole.lms.exception.errors.NotFoundException;
+import com.valentinakole.lms.model.Role;
 import com.valentinakole.lms.model.User;
 import com.valentinakole.lms.repository.UserRepository;
 import com.valentinakole.lms.service.UserService;
@@ -31,6 +32,7 @@ public class UserServiceImpl implements UserService {
         user.setToken(String.valueOf((int) (Math.random() * 1000000000)));
         user.setDateRegistration(LocalDate.now());
         user = userRepository.save(user);
+        user.setRole(Role.USER);
         log.info("The user with id {} was created", user.getUserId());
         return user;
     }
