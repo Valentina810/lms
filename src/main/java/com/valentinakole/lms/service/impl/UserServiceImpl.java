@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     public User findById(long id) {
-        log.info("The user with id {} was found", id);
+        log.info("Пользователь  с id {} найден", id);
         return userRepository.findById(id).orElseThrow(() -> new NotFoundException("Пользователь", id));
     }
 
@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
         user.setDateRegistration(LocalDate.now());
         user = userRepository.save(user);
         user.setRole(Role.USER);
-        log.info("The user with id {} was created", user.getUserId());
+        log.info("Пользователь  с id {} создан", user.getUserId());
         return user;
     }
 
@@ -47,16 +47,16 @@ public class UserServiceImpl implements UserService {
                     user.getEmail(), user.getDateBirth(), user.getAvatarUrl(), id);
         }
         User updatedUser = findById(id);
-        log.info("The user with id {} was updated", updatedUser.getUserId());
+        log.info("Пользователь  с id {} обновлен", updatedUser.getUserId());
         return userRepository.save(updatedUser);
     }
 
     public Optional<User> findByEmail(String email) {
         Optional<User> optional = userRepository.findByEmail(email);
         if (optional.isPresent()) {
-            log.info("The user with email {} was found", email);
+            log.info("Пользователь  с email {} найден", email);
         } else {
-            log.info("The user with email {} was not found", email);
+            log.info("Пользователь  с email {} не найден", email);
         }
         return optional;
     }
