@@ -22,6 +22,7 @@ import org.springframework.validation.BindingResult;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -94,9 +95,13 @@ public class LessonServiceImpl implements LessonService {
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void deleteLesson(long userId, long lessonId) {
-        userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Пользователь", userId));
-        lessonRepository.delete(lessonRepository.findLessonByUserId(userId, lessonId)
-                .orElseThrow(() -> new NotFoundException("Урок", lessonId)));
-        log.info("Удален урок c id {}", lessonId);
+        Optional<Lesson> lessonByUserId = lessonRepository.findLessonByUserId(userId, lessonId);
+        if (lessonByUserId.isPresent()) {
+            lessonRepository.delete(lessonByUserId.get());
+            log.info("Удален урок c id {}", lessonId);
+        } else {
+            userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Пользователь", userId));
+            throw new NotFoundException("Урок", lessonId);
+        }
     }
 }
