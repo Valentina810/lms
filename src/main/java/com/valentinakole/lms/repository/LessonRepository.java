@@ -2,6 +2,7 @@ package com.valentinakole.lms.repository;
 
 import com.valentinakole.lms.model.Lesson;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDate;
@@ -25,9 +26,9 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
             "order by les.date asc,les.timeStart asc ")
     List<Lesson> findLessonsByUserId(long userId, LocalDate from, LocalDate to);
 
-    @Query(value = "delete from lessons as les " +
-            "where les.id_lesson = ?2 " +
-            "and les.user_id = ?1 " +
-            "returning les.id_lesson",nativeQuery = true)
-    Integer deleteLesson(long userId, long lessonId);
+    @Modifying(clearAutomatically = true,flushAutomatically = true)
+    @Query(value = "delete from lessons l " +
+            "where l.id_lesson = ?2 " +
+            "and l.user_id = ?1 ",nativeQuery = true)
+    int deleteLesson(long userId, long lessonId);
 }
