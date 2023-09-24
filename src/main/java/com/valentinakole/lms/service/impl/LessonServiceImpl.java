@@ -37,7 +37,7 @@ public class LessonServiceImpl implements LessonService {
     @Override
     public FullLessonDto getLesson(long userId, long lessonId) {
         FullLessonDto fullLessonDto = lessonMapper.toFullLessonDto(lessonRepository.findLessonByUserId(userId, lessonId).orElseThrow(() ->
-                new NotFoundException("Урок", lessonId)));
+                new NotFoundException("У пользователя с id " + userId + " не найден урок с id " + lessonId)));
         log.info("Получен урок {}", fullLessonDto);
         return fullLessonDto;
     }
@@ -54,6 +54,9 @@ public class LessonServiceImpl implements LessonService {
                 .stream()
                 .map(lessonMapper::toShortLessonDto)
                 .collect(Collectors.toList());
+        if (shortLessonDtos.size() == 0) {
+            userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Пользователь", userId));
+        }
         log.info("Получены уроки пользователя c id {} за период с {} по {}: {}", userId, from, to, shortLessonDtos);
         return shortLessonDtos;
     }
