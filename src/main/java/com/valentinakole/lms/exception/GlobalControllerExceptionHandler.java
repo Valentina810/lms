@@ -3,6 +3,7 @@ package com.valentinakole.lms.exception;
 import com.valentinakole.lms.exception.errors.BadRequestError;
 import com.valentinakole.lms.exception.errors.EmailExistError;
 import com.valentinakole.lms.exception.errors.NotFoundException;
+import com.valentinakole.lms.util.validate.ValidationMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
@@ -20,15 +21,15 @@ import java.time.format.DateTimeParseException;
 @RestControllerAdvice
 @Slf4j
 public class GlobalControllerExceptionHandler {
-    @ExceptionHandler({BadRequestError.class,MethodArgumentNotValidException.class,
+    @ExceptionHandler({BadRequestError.class, MethodArgumentNotValidException.class,
             ConstraintViolationException.class})
     private ResponseEntity<ApiError> handelBadRequestException(RuntimeException e) {
         return getResponseError(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({HttpMessageNotReadableException.class,DateTimeParseException.class})
+    @ExceptionHandler({HttpMessageNotReadableException.class, DateTimeParseException.class})
     private ResponseEntity<ApiError> handelHttpMessageNotReadableException() {
-        return getResponseError("Неверная структура объекта: проверьте скобки, запятые и названия полей",
+        return getResponseError(ValidationMessage.VALIDATION_INCORRECT_JSON_OBJECT,
                 HttpStatus.BAD_REQUEST);
     }
 

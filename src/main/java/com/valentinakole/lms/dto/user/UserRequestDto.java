@@ -1,5 +1,6 @@
 package com.valentinakole.lms.dto.user;
 
+import com.valentinakole.lms.util.validate.ValidationMessage;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -46,7 +47,7 @@ public class UserRequestDto {
     @Schema(description = "Email", example = "irinasav@yandex.ru")
     private String email;
 
-    @Pattern(message = "Неверная структура объекта: проверьте скобки, запятые и названия полей", regexp = "\\d{4}-\\d{2}-\\d{2}")
+    @Pattern(message = ValidationMessage.VALIDATION_INCORRECT_JSON_OBJECT, regexp = "\\d{4}-\\d{2}-\\d{2}")
     @Schema(description = "Дата рождения", example = "2000-09-14")
     private String dateBirth;
 
