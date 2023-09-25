@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -17,7 +18,6 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.URL;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Builder
@@ -37,10 +37,10 @@ public class LessonCreateDto {
     @Size(max = 500, message = "Тема урока должна быть не больше 500 знаков")
     private String topic;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    @NotNull(message = "Дата урока обязательна для заполнения")
+    @Pattern(message = ValidationMessage.VALIDATION_INCORRECT_JSON_OBJECT, regexp = "\\d{4}-\\d{2}-\\d{2}")
+    @NotBlank(message = "Дата урока обязательна для заполнения")
     @Schema(description = "Дата урока", example = "2023-09-14")
-    private LocalDate date;
+    private String date;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
     @NotNull(message = "Время начала урока обязательно для заполнения")

@@ -26,9 +26,9 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
             "order by les.date asc,les.timeStart asc ")
     List<Lesson> findLessonsByUserId(long userId, LocalDate from, LocalDate to);
 
-    @Modifying(clearAutomatically = true,flushAutomatically = true)
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query(value = "delete from lessons l " +
             "where l.id_lesson = ?2 " +
-            "and l.user_id = ?1 ",nativeQuery = true)
+            "and l.user_id = ?1 ", nativeQuery = true)
     int deleteLesson(long userId, long lessonId);
 }
