@@ -22,6 +22,7 @@ import org.springframework.validation.BindingResult;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -82,16 +83,20 @@ public class LessonServiceImpl implements LessonService {
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public FullLessonDto updateLesson(long userId, long lessonId, LessonCreateDto lessonCreateDto, BindingResult bindingResult) {
         Checker.checkValidationErrors(bindingResult);
-        Long idSubject = lessonCreateDto.getSubject().getIdSubject();
-        subjectRepository.findById(idSubject).orElseThrow(() -> new NotFoundException("Предмет", idSubject));
-        Lesson lesson = lessonRepository.findLessonByUserId(userId, lessonId)
-                .orElseThrow(() -> new NotFoundException("Урок", lessonId));
-        Lesson updateLesson = lessonMapper.toLesson(lessonCreateDto);
-        updateLesson.setUser(lesson.getUser());
-        updateLesson.setIdLesson(lesson.getIdLesson());
-        FullLessonDto fullLessonDto = lessonMapper.toFullLessonDto(lessonRepository.save(updateLesson));
-        log.info("Обновлен урок c id {}: {}", fullLessonDto.getIdLesson(), fullLessonDto);
-        return fullLessonDto;
+        Optional<Lesson> lessonByUserId = lessonRepository.findLessonByUserId(userId, lessonId);
+        if (lessonByUserId.isPresent()) {
+            Lesson updateLesson = lessonMapper.toLesson(lessonCreateDto);
+            updateLesson.setIdLesson(lessonId);
+            updateLesson.setUser(lessonByUserId.get().getUser());
+            updateLesson.setSubject(subjectRepository.findById(updateLesson.getSubject().getIdSubject())
+                    .orElseThrow(() -> new NotFoundException("Предмет", updateLesson.getSubject().getIdSubject())));
+            FullLessonDto fullLessonDto = lessonMapper.toFullLessonDto(lessonRepository.save(updateLesson));
+            log.info("Обновлен урок c id {}: {}", fullLessonDto.getIdLesson(), fullLessonDto);
+            return fullLessonDto;
+        } else {
+            userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Пользователь", userId));
+            throw new NotFoundException("Урок", lessonId);
+        }
     }
 
     @Override
