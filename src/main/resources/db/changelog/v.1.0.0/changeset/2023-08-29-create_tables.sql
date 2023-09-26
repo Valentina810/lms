@@ -3,8 +3,8 @@ CREATE TABLE IF NOT EXISTS users
     id_user           bigint                 NOT NULL GENERATED ALWAYS AS IDENTITY,
     name              character varying(250) NOT NULL,
     surname           character varying(250),
-    login             character varying(100) NOT NULL,
-    password          character varying(100) NOT NULL, --пока в открытом виде
+    login             character varying(100) NOT NULL UNIQUE ,
+    password          character varying(100) NOT NULL,
     token             character varying(100) NOT NULL,
     email             character varying(250) NOT NULL,
     date_birth        date,                            --YYYY-MM-DD

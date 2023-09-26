@@ -1,7 +1,7 @@
 package com.valentinakole.lms.security;
 
 import com.valentinakole.lms.model.User;
-import com.valentinakole.lms.service.UserService;
+import com.valentinakole.lms.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,12 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserDetailServiceImpl implements UserDetailsService {
 
-    private final UserService userService;
+    private final UserRepository userRepository;
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userService.findByEmail(username).orElseThrow(() ->
+        User user = userRepository.findByLogin(username).orElseThrow(() ->
                 new UsernameNotFoundException(String.format("UserDetailsService: пользователь с username '%s' не найден", username)));
         return new UserDetailsImpl(user);
     }

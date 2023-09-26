@@ -1,5 +1,6 @@
 package com.valentinakole.lms.service.impl;
 
+import com.valentinakole.lms.exception.errors.BadRequestError;
 import com.valentinakole.lms.exception.errors.NotFoundException;
 import com.valentinakole.lms.model.Role;
 import com.valentinakole.lms.model.User;
@@ -7,6 +8,7 @@ import com.valentinakole.lms.repository.UserRepository;
 import com.valentinakole.lms.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public User findById(long id) {
         log.info("Пользователь  с id {} найден", id);
@@ -31,8 +34,13 @@ public class UserServiceImpl implements UserService {
     public User create(User user) {
         user.setToken(String.valueOf((int) (Math.random() * 1000000000)));
         user.setDateRegistration(LocalDate.now());
-        user = userRepository.save(user);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(Role.USER);
+        try {
+            user = userRepository.save(user);
+        } catch (RuntimeException e) {
+            throw new BadRequestError("Пользователь с таким логином уже существует");
+        }
         log.info("Пользователь  с id {} создан", user.getUserId());
         return user;
     }
