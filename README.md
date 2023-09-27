@@ -30,6 +30,10 @@ https://github.com/Valentina810/lms
 
  https://github.com/AnnaSog/LMS
 
+## Тест-кейсы API
+
+ https://docs.google.com/spreadsheets/d/1uZvrsg0FlwcaEs_8QjwqR4Y30nDS6iXhEKmZsSqvBKs/edit#gid=0
+
 ## Доска
 
 https://github.com/users/Valentina810/projects/1
