@@ -14,7 +14,7 @@ public class SwaggerConfig {
                 .info(
                         new Info()
                                 .title("Lms System Api")
-                                .version("1.0.0")
+                                .version("1.0.1 from 30 Sep 2023")
                                 .contact(
                                         new Contact()
                                                 .email("valentinavasileva34@gmail.com")
