@@ -29,7 +29,7 @@ import java.time.LocalTime;
 @Schema(description = "Сущность 'Урок' (создание/редактирование)")
 public class LessonCreateDto {
 
-    @NotNull(message = "Id предмета обязателен для заполнения")
+    @NotNull(message = ValidationMessage.VALIDATION_INCORRECT_SUBJECT)
     private Subject subject;
 
     @NotBlank(message = "Тема урока обязательна для заполнения")

@@ -3,6 +3,7 @@ package com.valentinakole.lms.service.impl;
 import com.valentinakole.lms.dto.lesson.FullLessonDto;
 import com.valentinakole.lms.dto.lesson.LessonCreateDto;
 import com.valentinakole.lms.dto.lesson.ShortLessonDto;
+import com.valentinakole.lms.exception.errors.BadRequestException;
 import com.valentinakole.lms.exception.errors.NotFoundException;
 import com.valentinakole.lms.mapper.LessonMapper;
 import com.valentinakole.lms.model.Lesson;
@@ -13,6 +14,7 @@ import com.valentinakole.lms.repository.SubjectRepository;
 import com.valentinakole.lms.repository.UserRepository;
 import com.valentinakole.lms.service.LessonService;
 import com.valentinakole.lms.util.validate.Checker;
+import com.valentinakole.lms.util.validate.ValidationMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -69,14 +71,16 @@ public class LessonServiceImpl implements LessonService {
         User user = userRepository.findById(userId).orElseThrow(() ->
                 new NotFoundException("Пользователь", userId));
         Long subjectId = lessonCreateDto.getSubject().getIdSubject();
-        Subject subject = subjectRepository.findById(subjectId)
-                .orElseThrow(() -> new NotFoundException("Предмет", subjectId));
-        Lesson lesson = lessonMapper.toLesson(lessonCreateDto);
-        lesson.setUser(user);
-        lesson.setSubject(subject);
-        FullLessonDto fullLessonDto = lessonMapper.toFullLessonDto(lessonRepository.save(lesson));
-        log.info("Добавлен новый урок: {}", fullLessonDto);
-        return fullLessonDto;
+        if (subjectId != null) {
+            Subject subject = subjectRepository.findById(subjectId)
+                    .orElseThrow(() -> new NotFoundException("Предмет", subjectId));
+            Lesson lesson = lessonMapper.toLesson(lessonCreateDto);
+            lesson.setUser(user);
+            lesson.setSubject(subject);
+            FullLessonDto fullLessonDto = lessonMapper.toFullLessonDto(lessonRepository.save(lesson));
+            log.info("Добавлен новый урок: {}", fullLessonDto);
+            return fullLessonDto;
+        } else throw new BadRequestException(ValidationMessage.VALIDATION_INCORRECT_SUBJECT);
     }
 
     @Override
@@ -88,11 +92,14 @@ public class LessonServiceImpl implements LessonService {
             Lesson updateLesson = lessonMapper.toLesson(lessonCreateDto);
             updateLesson.setIdLesson(lessonId);
             updateLesson.setUser(lessonByUserId.get().getUser());
-            updateLesson.setSubject(subjectRepository.findById(updateLesson.getSubject().getIdSubject())
-                    .orElseThrow(() -> new NotFoundException("Предмет", updateLesson.getSubject().getIdSubject())));
-            FullLessonDto fullLessonDto = lessonMapper.toFullLessonDto(lessonRepository.save(updateLesson));
-            log.info("Обновлен урок c id {}: {}", fullLessonDto.getIdLesson(), fullLessonDto);
-            return fullLessonDto;
+            Long subjectId = updateLesson.getSubject().getIdSubject();
+            if (subjectId != null) {
+                updateLesson.setSubject(subjectRepository.findById(subjectId)
+                        .orElseThrow(() -> new NotFoundException("Предмет", updateLesson.getSubject().getIdSubject())));
+                FullLessonDto fullLessonDto = lessonMapper.toFullLessonDto(lessonRepository.save(updateLesson));
+                log.info("Обновлен урок c id {}: {}", fullLessonDto.getIdLesson(), fullLessonDto);
+                return fullLessonDto;
+            } else throw new BadRequestException(ValidationMessage.VALIDATION_INCORRECT_SUBJECT);
         } else {
             userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Пользователь", userId));
             throw new NotFoundException("Урок", lessonId);
