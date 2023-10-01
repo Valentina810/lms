@@ -1,0 +1,813 @@
+{
+	"info": {
+		"_postman_id": "ea3ebd60-aaad-4e3f-9726-36cc78f4e4f6",
+		"name": "lms USER-CONTROLLER",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28045637"
+	},
+	"item": [
+		{
+			"name": "получение информации о пользователе с вводом существующего id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Test user response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has 'idUser' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('idUser');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has 'name' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('name');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has 'surname' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('surname');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has 'login' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('login');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has 'email' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('email');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has 'dateBirth' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('dateBirth');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has 'dateRegistration' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('dateRegistration');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has 'avatarUrl' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('avatarUrl');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "404 получение информации о пользователе с вводом несуществующего id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/30000000",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"30000000"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Создание пользователя",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var responseJson = pm.response.json();",
+							"var idUser = responseJson.idUser;",
+							"pm.environment.set(\"idUser\", idUser);",
+							"",
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.eql(201);",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Response has 'name' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.name).to.exist.and.to.be.a('string');",
+							"});",
+							"",
+							"pm.test(\"'name' length is correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.name.length).to.be.above(0).and.below(251);",
+							"});",
+							"",
+							"pm.test(\"Response has 'surname' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('surname');",
+							"});",
+							"",
+							"pm.test(\"'Surname' length is correct\", function () {",
+							"     var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.surname.length).to.be.below(251);",
+							"});",
+							"",
+							"pm.test(\"Response has 'login' field\", function () {",
+							"     var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.login).to.exist.and.to.be.a('string');",
+							"});",
+							"",
+							"pm.test(\"'Login' length is correct\", function () {",
+							"     var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.login.length).to.be.above(0).and.below(101);",
+							"});",
+							"",
+							"pm.test(\"Response has 'email' field\", function () {",
+							"     var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.email).to.exist.and.to.be.a('string');",
+							"});",
+							"",
+							"pm.test(\"'email' length is correct\", function () {",
+							"     var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.email.length).to.be.above(0).and.below(251);",
+							"});",
+							"",
+							"pm.test(\"Response has 'avatarUrl' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('avatarUrl');",
+							"});",
+							"",
+							"pm.test(\"'avatarUrl' length is correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.avatarUrl.length).to.be.below(1001);",
+							"});",
+							"",
+							"pm.test(\"Response has 'dateBirth' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.dateBirth).to.have.property;",
+							"});",
+							"",
+							"pm.test(\"Format of 'dateBirth' field is valid if it's not null\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.dateBirth).to.match(/^\\d{4}-\\d{2}-\\d{2}$/);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"{{$randomFirstName}}\",\r\n  \"surname\": \"{{$randomLastName}}\",\r\n  \"login\": \"{{$randomWord}}\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"{{$randomEmail}}\",\r\n  \"dateBirth\": \"2000-12-12\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "409 Создание пользователя с передачей существующего email",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"409 conflict if email exists\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([409]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"irinasav\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"irinasav@yandex.ru\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание пользователя с незаполненным name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if name is empty\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"irinasav\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"emaill@yandex.ru\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание пользователя с незаполненным email",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if email is empty\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"irinasav\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание пользователя с незаполненным login",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if login is empty\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"emaill@yandex.ru\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Изменение информации о пользователе",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful PATCH request\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Headers is valid\", function() {\r",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');\r",
+							"    pm.expect(pm.response.headers.get('Connection')).to.eql('keep-alive')\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has 'name' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.name).to.exist.and.to.be.a('string');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"'name' length is correct\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.name.length).to.be.above(0).and.below(251);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has 'surname' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('surname');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"'Surname' length is correct\", function () {\r",
+							"     var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.surname.length).to.be.below(251);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has 'login' field\", function () {\r",
+							"     var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.login).to.exist.and.to.be.a('string');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"'Login' length is correct\", function () {\r",
+							"     var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.login.length).to.be.above(0).and.below(101);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has 'email' field\", function () {\r",
+							"     var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.email).to.exist.and.to.be.a('string');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"'email' length is correct\", function () {\r",
+							"     var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.email.length).to.be.above(0).and.below(251);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has 'avatarUrl' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('avatarUrl');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"'avatarUrl' length is correct\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.avatarUrl.length).to.be.below(1001);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has 'dateBirth' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.dateBirth).to.have.property;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Format of 'dateBirth' field is valid if it's not null\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.dateBirth).to.match(/^\\d{4}-\\d{2}-\\d{2}$/);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"{{$randomFirstName}}\",\r\n  \"surname\": \"{{$randomLastName}}\",\r\n  \"login\": \"{{$randomWord}}\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"{{$randomEmail}}\",\r\n  \"dateBirth\": \"2001-09-09\",\r\n  \"avatarUrl\": \"{{$randomImageUrl}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/3",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Редактирование пользователя с незаполненным name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if name is empty\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"irinasav\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"emaill@yandex.ru\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/3",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Редактирование пользователя с незаполненным login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if login is empty\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"emaill@yandex.ru\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/3",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Редактирование пользователя с незаполненным email",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if email is empty\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"login\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/3",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "404 Изменение информации о пользователе c передачей несуществующего id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Анна\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"irinasav\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"irinasav111@yandex.ru\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/5000",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"5000"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "409 Редактирование пользователя с передачей существующего email",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"409 conflict if email exists\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([409]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"irinasav\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"irina@yandex.ru\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/3",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"3"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
