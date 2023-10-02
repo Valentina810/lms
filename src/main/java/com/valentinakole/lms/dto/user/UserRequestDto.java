@@ -37,6 +37,7 @@ public class UserRequestDto {
     @Schema(description = "Логин", example = "irinasav")
     private String login;
 
+    @NotBlank(message = "Пароль не должен быть пустым")
     @Size(max = 100, message = "Пароль должен быть не больше 100 знаков")
     @Schema(description = "Пароль", example = "TY89*tQW!k")
     private String password;
