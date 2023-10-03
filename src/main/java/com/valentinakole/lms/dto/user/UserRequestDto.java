@@ -53,7 +53,7 @@ public class UserRequestDto {
     private String dateBirth;
 
     @URL(message = "Неправильный формат URL, пример https://habr.com/")
-    @Size(max = 1000, message = "Длина адреса должен быть не больше 1000 знаков")
+    @Size(max = 1000, message = "Длина адреса должна быть не больше 1000 знаков")
     @Schema(description = "Урл, по которому хранится аватар", example = "https://habr.com/ru/irinasav.jpg")
     private String avatarUrl;
 }
