@@ -1,5 +1,6 @@
 package com.valentinakole.lms.repository;
 
+import com.valentinakole.lms.dto.user.UserRequestDto;
 import com.valentinakole.lms.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

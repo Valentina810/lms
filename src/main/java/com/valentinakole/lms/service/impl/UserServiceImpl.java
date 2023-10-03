@@ -1,16 +1,20 @@
 package com.valentinakole.lms.service.impl;
 
+import com.valentinakole.lms.dto.user.UserRequestDto;
+import com.valentinakole.lms.dto.user.UserResponseDto;
 import com.valentinakole.lms.exception.errors.NotFoundException;
+import com.valentinakole.lms.mapper.UpdateUserMapper;
+import com.valentinakole.lms.mapper.UserMapper;
 import com.valentinakole.lms.model.User;
 import com.valentinakole.lms.repository.UserRepository;
 import com.valentinakole.lms.service.UserService;
+import com.valentinakole.lms.util.validate.ValidateUpdatedFields;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -20,6 +24,9 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final UpdateUserMapper updateUserMapper;
+    private final UserMapper userMapper;
+    private final ValidateUpdatedFields validateUpdatedFields;
 
     public User findById(long id) {
         log.info("The user with id {} was found", id);
@@ -36,17 +43,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional
-    public User update(long id, User user) {
-        if (Objects.equals(user.getPassword(), "")) {
-            userRepository.updateWithoutPassword(user.getName(), user.getSurname(), user.getLogin(), user.getEmail(),
-                    user.getDateBirth(), user.getAvatarUrl(), id);
-        } else {
-            userRepository.updateWithPassword(user.getName(), user.getSurname(), user.getLogin(), user.getPassword(),
-                    user.getEmail(), user.getDateBirth(), user.getAvatarUrl(), id);
-        }
-        User updatedUser = findById(id);
-        log.info("The user with id {} was updated", updatedUser.getUserId());
-        return userRepository.save(updatedUser);
+    public UserResponseDto update(long id, UserRequestDto userRequestDto) {
+
+        User user = findById(id);
+
+        userRequestDto = updateUserMapper.toUserRequestDto(user, userRequestDto);
+
+        validateUpdatedFields.validate(id, userRequestDto);
+
+        userRepository.updateWithPassword(userRequestDto.getName(), userRequestDto.getSurname(), userRequestDto.getLogin(), userRequestDto.getPassword(),
+                userRequestDto.getEmail(), LocalDate.parse(userRequestDto.getDateBirth()), userRequestDto.getAvatarUrl(), id);
+        log.info("The user with id {} was updated", id);
+        UserResponseDto userResponseDto = userMapper.toUserResponseDto(userRequestDto);
+        userResponseDto.setUserId(id);
+        return userResponseDto;
     }
 
     public Optional<User> findByEmail(String email) {

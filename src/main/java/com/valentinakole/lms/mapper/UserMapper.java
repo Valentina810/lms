@@ -13,4 +13,8 @@ public interface UserMapper {
     UserResponseDto toUserResponseDto(User user);
 
     UserResponseGetDto toUserResponseGetDto(User user);
+
+    UserRequestDto toUserRequestDto(User user);
+
+    UserResponseDto toUserResponseDto(UserRequestDto userRequestDto);
 }

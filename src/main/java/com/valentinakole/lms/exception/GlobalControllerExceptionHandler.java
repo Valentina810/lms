@@ -5,6 +5,7 @@ import com.valentinakole.lms.exception.errors.BadRequestException;
 import com.valentinakole.lms.exception.errors.EmailExistError;
 import com.valentinakole.lms.exception.errors.NotFoundException;
 import com.valentinakole.lms.util.validate.ValidationMessage;
+import jakarta.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,7 @@ import java.time.format.DateTimeParseException;
 @Slf4j
 public class GlobalControllerExceptionHandler {
     @ExceptionHandler({BadRequestError.class, MethodArgumentNotValidException.class,
-            ConstraintViolationException.class, BadRequestException.class})
+            ConstraintViolationException.class, BadRequestException.class, ValidationException.class})
     private ResponseEntity<ApiError> handelBadRequestException(RuntimeException e) {
         return getResponseError(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
