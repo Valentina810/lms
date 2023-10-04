@@ -1,5 +1,6 @@
 package com.valentinakole.lms.mapper;
 
+import com.valentinakole.lms.dto.user.UserDto;
 import com.valentinakole.lms.dto.user.UserRequestDto;
 import com.valentinakole.lms.dto.user.UserResponseDto;
 import com.valentinakole.lms.dto.user.UserResponseGetDto;
@@ -14,7 +15,7 @@ public interface UserMapper {
 
     UserResponseGetDto toUserResponseGetDto(User user);
 
-    UserRequestDto toUserRequestDto(User user);
+    UserDto toUserDto(User user);
 
-    UserResponseDto toUserResponseDto(UserRequestDto userRequestDto);
+    UserResponseDto toUserResponseDto(UserDto userDto);
 }

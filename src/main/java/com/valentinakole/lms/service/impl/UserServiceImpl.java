@@ -1,9 +1,9 @@
 package com.valentinakole.lms.service.impl;
 
+import com.valentinakole.lms.dto.user.UserDto;
 import com.valentinakole.lms.dto.user.UserRequestDto;
 import com.valentinakole.lms.dto.user.UserResponseDto;
 import com.valentinakole.lms.exception.errors.NotFoundException;
-import com.valentinakole.lms.mapper.UpdateUserMapper;
 import com.valentinakole.lms.mapper.UserMapper;
 import com.valentinakole.lms.model.User;
 import com.valentinakole.lms.repository.UserRepository;
@@ -11,11 +11,16 @@ import com.valentinakole.lms.service.UserService;
 import com.valentinakole.lms.util.validate.ValidateUpdatedFields;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -24,9 +29,9 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final UpdateUserMapper updateUserMapper;
     private final UserMapper userMapper;
     private final ValidateUpdatedFields validateUpdatedFields;
+    private final ModelMapper mapper;
 
     public User findById(long id) {
         log.info("The user with id {} was found", id);
@@ -44,19 +49,14 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     public UserResponseDto update(long id, UserRequestDto userRequestDto) {
-
         User user = findById(id);
-
-        userRequestDto = updateUserMapper.toUserRequestDto(user, userRequestDto);
-
-        validateUpdatedFields.validate(id, userRequestDto);
-
-        userRepository.updateWithPassword(userRequestDto.getName(), userRequestDto.getSurname(), userRequestDto.getLogin(), userRequestDto.getPassword(),
-                userRequestDto.getEmail(), LocalDate.parse(userRequestDto.getDateBirth()), userRequestDto.getAvatarUrl(), id);
+        UserDto userDto = userMapper.toUserDto(user);
+        mapper.map(userRequestDto, userDto);
+        validateUpdatedFields.validate(userDto);
+        userRepository.updateWithPassword(userDto.getName(), userDto.getSurname(), userDto.getLogin(), userDto.getPassword(),
+                userDto.getEmail(), LocalDate.parse(userDto.getDateBirth()), userDto.getAvatarUrl(), id);
         log.info("The user with id {} was updated", id);
-        UserResponseDto userResponseDto = userMapper.toUserResponseDto(userRequestDto);
-        userResponseDto.setUserId(id);
-        return userResponseDto;
+        return userMapper.toUserResponseDto(userDto);
     }
 
     public Optional<User> findByEmail(String email) {
@@ -67,5 +67,19 @@ public class UserServiceImpl implements UserService {
             log.info("The user with email {} was not found", email);
         }
         return optional;
+    }
+
+    private String[] getNullPropertyNames(Object source) {
+        final BeanWrapper src = new BeanWrapperImpl(source);
+        java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
+
+        Set<String> emptyNames = new HashSet<>();
+        for (java.beans.PropertyDescriptor pd : pds) {
+            Object srcValue = src.getPropertyValue(pd.getName());
+            if (srcValue == null) emptyNames.add(pd.getName());
+        }
+
+        String[] result = new String[emptyNames.size()];
+        return emptyNames.toArray(result);
     }
 }
