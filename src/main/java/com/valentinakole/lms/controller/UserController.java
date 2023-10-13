@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
 import java.util.Objects;
 
 @Slf4j
@@ -55,10 +56,7 @@ public class UserController {
     @PatchMapping("/{id}")
     @Operation(summary = "Изменение пользователя")
     public ResponseEntity<UserResponseDto> update(@PathVariable("id") @Parameter(description = "Идентификатор user-а") long id,
-                                                  @RequestBody @Valid UserRequestDto userRequestDto, BindingResult bindingResult) {
-        User user = userMapper.toUser(userRequestDto);
-        user.setUserId(id);
-        validateUser.validateUser(user, bindingResult);
-        return ResponseEntity.status(200).body(userMapper.toUserResponseDto(userService.update(id, user)));
+                                                  @RequestBody Map<String, Object> map) {
+        return ResponseEntity.status(200).body(userService.update(id, map));
     }
 }

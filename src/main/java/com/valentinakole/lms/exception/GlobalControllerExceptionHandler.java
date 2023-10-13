@@ -3,6 +3,7 @@ package com.valentinakole.lms.exception;
 import com.valentinakole.lms.exception.errors.BadRequestError;
 import com.valentinakole.lms.exception.errors.BadRequestException;
 import com.valentinakole.lms.exception.errors.EmailExistError;
+import com.valentinakole.lms.exception.errors.NoSuchFieldError;
 import com.valentinakole.lms.exception.errors.NotFoundException;
 import com.valentinakole.lms.util.validate.ValidationMessage;
 import lombok.extern.slf4j.Slf4j;
@@ -49,8 +50,8 @@ public class GlobalControllerExceptionHandler {
         return getResponseError(e.getMessage(), HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler
-    private ResponseEntity<ApiError> handelHttpServerErrorException(HttpServerErrorException e) {
+    @ExceptionHandler({HttpServerErrorException.class, NoSuchFieldError.class, IllegalAccessError.class})
+    private ResponseEntity<ApiError> handelHttpServerErrorException(RuntimeException e) {
         return getResponseError(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

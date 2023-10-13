@@ -1,17 +1,29 @@
 package com.valentinakole.lms.service.impl;
 
+import com.querydsl.core.types.Path;
+import com.valentinakole.lms.dto.user.UserRequestDto;
+import com.valentinakole.lms.dto.user.UserResponseDto;
 import com.valentinakole.lms.exception.errors.NotFoundException;
+import com.valentinakole.lms.mapper.UserMapper;
+import com.valentinakole.lms.model.QUser;
 import com.valentinakole.lms.model.User;
 import com.valentinakole.lms.repository.UserRepository;
 import com.valentinakole.lms.service.UserService;
+import com.valentinakole.lms.util.GenerateListsForQueryDsl;
+import com.valentinakole.lms.util.ListPaths;
+import com.valentinakole.lms.util.validation.ValidationEmail;
+import com.valentinakole.lms.util.validation.ValidationFields;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.Objects;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+
 
 @Slf4j
 @Service
@@ -19,7 +31,12 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
+    private final GenerateListsForQueryDsl generate;
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
+    private final ModelMapper mapper;
+    private final ValidationEmail validationEmail;
+    private final ValidationFields validationFields;
 
     public User findById(long id) {
         log.info("The user with id {} was found", id);
@@ -36,17 +53,28 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional
-    public User update(long id, User user) {
-        if (Objects.equals(user.getPassword(), "")) {
-            userRepository.updateWithoutPassword(user.getName(), user.getSurname(), user.getLogin(), user.getEmail(),
-                    user.getDateBirth(), user.getAvatarUrl(), id);
-        } else {
-            userRepository.updateWithPassword(user.getName(), user.getSurname(), user.getLogin(), user.getPassword(),
-                    user.getEmail(), user.getDateBirth(), user.getAvatarUrl(), id);
+    public UserResponseDto update(long userId, Map<String, Object> map){
+
+        User user = findById(userId);
+        UserRequestDto updatedUserRequestDto = mapper.map(map, UserRequestDto.class);
+        UserRequestDto userRequestDto = userMapper.toUserRequestDto(user);
+        mapper.map(updatedUserRequestDto, userRequestDto);
+
+        validationFields.validate(userRequestDto);
+        validationEmail.validate(userRequestDto.getEmail(), userId);
+
+        user = userMapper.toUser(userRequestDto);
+        user.setUserId(userId);
+
+        Map<String, Path<?>> paths = new ListPaths().get(new QUser("user"));
+        Map<String, List<?>> pathsAndValue = generate.get(user, map, paths);
+
+        long counter = userRepository.update(userId, (List<Path<?>>) pathsAndValue.get("path"), pathsAndValue.get("value"));
+        if (counter != 1) {
+            throw new NotFoundException("Пользователь", userId);
         }
-        User updatedUser = findById(id);
-        log.info("The user with id {} was updated", updatedUser.getUserId());
-        return userRepository.save(updatedUser);
+
+        return userMapper.toUserResponseDto(user);
     }
 
     public Optional<User> findByEmail(String email) {
