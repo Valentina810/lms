@@ -7,7 +7,7 @@ import com.valentinakole.lms.exception.errors.BadRequestError;
 import com.valentinakole.lms.mapper.UserMapper;
 import com.valentinakole.lms.model.User;
 import com.valentinakole.lms.service.UserService;
-import com.valentinakole.lms.util.validate.ValidateUser;
+import com.valentinakole.lms.util.validate.ErrorsValidationChecker;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
@@ -32,7 +32,6 @@ import java.util.Objects;
 public class UserController {
 
     private final UserService userService;
-    private final ValidateUser validateUser;
     private final UserMapper userMapper;
 
     @GetMapping("/{id}")
@@ -44,11 +43,11 @@ public class UserController {
     @PostMapping
     @Operation(summary = "Создание пользователя")
     public ResponseEntity<UserResponseDto> create(@RequestBody @Valid UserRequestDto userRequestDto, BindingResult bindingResult) {
+        ErrorsValidationChecker.checkValidationErrors(bindingResult);
         User user = userMapper.toUser(userRequestDto);
         if (Objects.equals(user.getPassword(), "")) {
             throw new BadRequestError("Пароль не должен быть пустым");
         }
-        validateUser.validateUser(user, bindingResult);
         return ResponseEntity.status(201).body(userMapper.toUserResponseDto(userService.create(user)));
     }
 
@@ -56,9 +55,9 @@ public class UserController {
     @Operation(summary = "Изменение пользователя")
     public ResponseEntity<UserResponseDto> update(@PathVariable("id") @Parameter(description = "Идентификатор user-а") long id,
                                                   @RequestBody @Valid UserRequestDto userRequestDto, BindingResult bindingResult) {
+        ErrorsValidationChecker.checkValidationErrors(bindingResult);
         User user = userMapper.toUser(userRequestDto);
         user.setUserId(id);
-        validateUser.validateUser(user, bindingResult);
         return ResponseEntity.status(200).body(userMapper.toUserResponseDto(userService.update(id, user)));
     }
 }

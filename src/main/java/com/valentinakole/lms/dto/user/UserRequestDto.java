@@ -1,6 +1,7 @@
 package com.valentinakole.lms.dto.user;
 
 import com.valentinakole.lms.util.validate.ValidationMessage;
+import com.valentinakole.lms.util.validate.annotation.NotDuplicateEmail;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -42,6 +43,7 @@ public class UserRequestDto {
     @Schema(description = "Пароль", example = "TY89*tQW!k")
     private String password;
 
+    @NotDuplicateEmail(message = "Эта электронная почта уже существует в базе данных")
     @NotBlank(message = "Поле Email обязательно для заполнения")
     @Size(max = 250, message = "Email должен быть не больше 250 знаков")
     @Email(message = "Email должна иметь правильный формат. Пример ivan@yandex.ru или petr@gmail.com")
