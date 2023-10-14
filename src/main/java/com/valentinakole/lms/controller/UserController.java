@@ -1,8 +1,9 @@
 package com.valentinakole.lms.controller;
 
-import com.valentinakole.lms.dto.user.UserRequestDto;
+import com.valentinakole.lms.dto.user.UserCreateDto;
 import com.valentinakole.lms.dto.user.UserResponseDto;
 import com.valentinakole.lms.dto.user.UserResponseGetDto;
+import com.valentinakole.lms.dto.user.UserUpdateDto;
 import com.valentinakole.lms.exception.errors.BadRequestError;
 import com.valentinakole.lms.mapper.UserMapper;
 import com.valentinakole.lms.model.User;
@@ -42,9 +43,9 @@ public class UserController {
 
     @PostMapping
     @Operation(summary = "Создание пользователя")
-    public ResponseEntity<UserResponseDto> create(@RequestBody @Valid UserRequestDto userRequestDto, BindingResult bindingResult) {
+    public ResponseEntity<UserResponseDto> create(@RequestBody @Valid UserCreateDto userCreateDto, BindingResult bindingResult) {
         ErrorsValidationChecker.checkValidationErrors(bindingResult);
-        User user = userMapper.toUser(userRequestDto);
+        User user = userMapper.toUser(userCreateDto);
         if (Objects.equals(user.getPassword(), "")) {
             throw new BadRequestError("Пароль не должен быть пустым");
         }
@@ -54,9 +55,9 @@ public class UserController {
     @PatchMapping("/{id}")
     @Operation(summary = "Изменение пользователя")
     public ResponseEntity<UserResponseDto> update(@PathVariable("id") @Parameter(description = "Идентификатор user-а") long id,
-                                                  @RequestBody @Valid UserRequestDto userRequestDto, BindingResult bindingResult) {
+                                                  @RequestBody @Valid UserUpdateDto userUpdateDto, BindingResult bindingResult) {
         ErrorsValidationChecker.checkValidationErrors(bindingResult);
-        User user = userMapper.toUser(userRequestDto);
+        User user = userMapper.toUser(userUpdateDto);
         user.setUserId(id);
         return ResponseEntity.status(200).body(userMapper.toUserResponseDto(userService.update(id, user)));
     }

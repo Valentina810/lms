@@ -14,6 +14,6 @@ public class NotDuplicateEmailValidator implements ConstraintValidator<NotDuplic
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        return userService.findByEmail(value).isEmpty();
+        return value == null || userService.findByEmail(value).isEmpty();
     }
 }

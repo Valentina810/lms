@@ -14,7 +14,6 @@ import com.valentinakole.lms.repository.SubjectRepository;
 import com.valentinakole.lms.repository.UserRepository;
 import com.valentinakole.lms.service.LessonService;
 import com.valentinakole.lms.util.validate.ErrorsValidationChecker;
-import com.valentinakole.lms.util.validate.ValidationMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,6 +25,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.valentinakole.lms.util.validate.ValidationMessage.INCORRECT_SUBJECT;
 
 @Slf4j
 @Service
@@ -80,7 +81,7 @@ public class LessonServiceImpl implements LessonService {
             FullLessonDto fullLessonDto = lessonMapper.toFullLessonDto(lessonRepository.save(lesson));
             log.info("Добавлен новый урок: {}", fullLessonDto);
             return fullLessonDto;
-        } else throw new BadRequestException(ValidationMessage.VALIDATION_INCORRECT_SUBJECT);
+        } else throw new BadRequestException(INCORRECT_SUBJECT);
     }
 
     @Override
@@ -99,7 +100,7 @@ public class LessonServiceImpl implements LessonService {
                 FullLessonDto fullLessonDto = lessonMapper.toFullLessonDto(lessonRepository.save(updateLesson));
                 log.info("Обновлен урок c id {}: {}", fullLessonDto.getIdLesson(), fullLessonDto);
                 return fullLessonDto;
-            } else throw new BadRequestException(ValidationMessage.VALIDATION_INCORRECT_SUBJECT);
+            } else throw new BadRequestException(INCORRECT_SUBJECT);
         } else {
             userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Пользователь", userId));
             throw new NotFoundException("Урок", lessonId);
