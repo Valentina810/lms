@@ -6,7 +6,7 @@ import org.springframework.validation.FieldError;
 
 import java.util.List;
 
-public class Checker {
+public class ErrorsValidationChecker {
     public static void checkValidationErrors(BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             StringBuilder errorMessage = new StringBuilder();

@@ -13,7 +13,7 @@ import com.valentinakole.lms.repository.LessonRepository;
 import com.valentinakole.lms.repository.SubjectRepository;
 import com.valentinakole.lms.repository.UserRepository;
 import com.valentinakole.lms.service.LessonService;
-import com.valentinakole.lms.util.validate.Checker;
+import com.valentinakole.lms.util.validate.ErrorsValidationChecker;
 import com.valentinakole.lms.util.validate.ValidationMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -57,7 +57,7 @@ public class LessonServiceImpl implements LessonService {
                 .stream()
                 .map(lessonMapper::toShortLessonDto)
                 .collect(Collectors.toList());
-        if (shortLessonDtos.size() == 0) {
+        if (shortLessonDtos.isEmpty()) {
             userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Пользователь", userId));
         }
         log.info("Получены уроки пользователя c id {} за период с {} по {}: {}", userId, from, to, shortLessonDtos);
@@ -67,7 +67,7 @@ public class LessonServiceImpl implements LessonService {
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public FullLessonDto addLesson(long userId, LessonCreateDto lessonCreateDto, BindingResult bindingResult) {
-        Checker.checkValidationErrors(bindingResult);
+        ErrorsValidationChecker.checkValidationErrors(bindingResult);
         User user = userRepository.findById(userId).orElseThrow(() ->
                 new NotFoundException("Пользователь", userId));
         Long subjectId = lessonCreateDto.getSubject().getIdSubject();
@@ -86,7 +86,7 @@ public class LessonServiceImpl implements LessonService {
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public FullLessonDto updateLesson(long userId, long lessonId, LessonCreateDto lessonCreateDto, BindingResult bindingResult) {
-        Checker.checkValidationErrors(bindingResult);
+        ErrorsValidationChecker.checkValidationErrors(bindingResult);
         Optional<Lesson> lessonByUserId = lessonRepository.findLessonByUserId(userId, lessonId);
         if (lessonByUserId.isPresent()) {
             Lesson updateLesson = lessonMapper.toLesson(lessonCreateDto);
