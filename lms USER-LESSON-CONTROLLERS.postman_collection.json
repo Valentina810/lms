@@ -1,0 +1,6340 @@
+{
+	"info": {
+		"_postman_id": "38b0170c-45d2-43d7-866f-34aa53a1ac44",
+		"name": "lms USER-LESSON-CONTROLLERS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28045637"
+	},
+	"item": [
+		{
+			"name": "Создание пользователя",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var userId = pm.response.json().userId;",
+							"pm.environment.set(\"idUser\", userId);",
+							"",
+							"var email = pm.response.json().email;",
+							"pm.environment.set(\"email\", email);",
+							"",
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.eql(201);",
+							"});",
+							"",
+							"pm.test(\"Response has 'name' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.name).to.exist.and.to.be.a('string');",
+							"});",
+							"",
+							"pm.test(\"'name' length is correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.name.length).to.be.above(0).and.below(251);",
+							"});",
+							"",
+							"pm.test(\"Response has 'surname' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('surname');",
+							"});",
+							"",
+							"pm.test(\"'Surname' length is correct\", function () {",
+							"     var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.surname.length).to.be.below(251);",
+							"});",
+							"",
+							"pm.test(\"Response has 'login' field\", function () {",
+							"     var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.login).to.exist.and.to.be.a('string');",
+							"});",
+							"",
+							"pm.test(\"'Login' length is correct\", function () {",
+							"     var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.login.length).to.be.above(0).and.below(101);",
+							"});",
+							"",
+							"pm.test(\"Response has 'email' field\", function () {",
+							"     var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.email).to.exist.and.to.be.a('string');",
+							"});",
+							"",
+							"pm.test(\"'email' length is correct\", function () {",
+							"     var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.email.length).to.be.above(0).and.below(251);",
+							"});",
+							"",
+							"pm.test(\"Response has 'avatarUrl' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('avatarUrl');",
+							"});",
+							"",
+							"pm.test(\"'avatarUrl' length is correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.avatarUrl.length).to.be.below(1001);",
+							"});",
+							"",
+							"pm.test(\"Response has 'dateBirth' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.dateBirth).to.have.property;",
+							"});",
+							"",
+							"pm.test(\"Format of 'dateBirth' field is valid if it's not null\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.dateBirth).to.match(/^\\d{4}-\\d{2}-\\d{2}$/);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"{{$randomFirstName}}\",\r\n  \"surname\": \"{{$randomLastName}}\",\r\n  \"login\": \"{{$randomWord}}\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"{{$randomEmail}}\",\r\n  \"dateBirth\": \"2000-12-12\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "409 Создание пользователя с передачей существующего email",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"409 conflict if email exists\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([409]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"irinasav\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"{{email}}\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание пользователя с незаполненным name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if name is empty\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"irinasav\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"emaill@yandex.ru\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание пользователя с незаполненным email",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if email is empty\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"irinasav\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание пользователя с незаполненным login",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if login is empty\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"emaill@yandex.ru\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание пользователя c передачей строки из пробелов в name",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if login is empty\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"         \",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"irina\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"emaill@yandex.ru\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание пользователя c передачей цифр в name",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if name consists of numbers\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"123\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"irina\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"emaill@yandex.ru\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание пользователя c передачей точки в name",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if name consists of dot\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \".\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"irina\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"emaill@yandex.ru\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание пользователя c передачей запятой в name",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if name consists of comma\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \",\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"irina\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"emaill@yandex.ru\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание пользователя c передачей дефиса в name",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if name consists of dash\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"-\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"irina\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"emaill@yandex.ru\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание пользователя c передачей спецсимволов в name",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if name consists of special symbols\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"!?\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"irina\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"emaill@yandex.ru\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание пользователя c передачей 251 символа в name",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if name consists of 251 symbols\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"этооченьдлинноеимяпоэтомудолжнабытьошибкаэтооченьдлинноеимяпоэтомудолжнабытьошибкаэтооченьдлинноеимяпоэтомудолжнабытьошибкаэтооченьдлинноеимяпоэтомудолжнабытьошибкаэтооченьдлинноеимяпоэтомудолжнабытьошибкаэтооченьдлинноеимяпоэтомудолжнабытьошибкаошибк\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"irina\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"emaill@yandex.ru\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание пользователя c передачей цифр в surname",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if surname consists of numbers\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"123\",\r\n  \"login\": \"irina\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"emaill@yandex.ru\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание пользователя c передачей точки в surname",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if surname consists of dot\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \".\",\r\n  \"login\": \"irina\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"emaill@yandex.ru\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание пользователя c передачей запятой в surname",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if surname consists of comma\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \",\",\r\n  \"login\": \"irina\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"emaill@yandex.ru\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание пользователя c передачей спецсимволов в surname",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if surname consists of special symbols\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"!?\",\r\n  \"login\": \"irina\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"emaill@yandex.ru\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание пользователя c передачей дефиса в surname",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if surname consists of dash\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"-\",\r\n  \"login\": \"irina\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"emaill@yandex.ru\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание пользователя c передачей 251 символа в surname",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if surname consists of 251 symbols\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"оченьдлиннаяфамилияоченьдлиннаяфамилияоченьдлиннаяфамилияоченьдлиннаяфамилияоченьдлиннаяфамилияоченьдлиннаяфамилияоченьдлиннаяфамилияоченьдлиннаяфамилияоченьдлиннаяфамилияоченьдлиннаяфамилияоченьдлиннаяфамилияоченьдлиннаяфамилияоченьдлиннаяфамилияфами\",\r\n  \"login\": \"irina\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"emaill@yandex.ru\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание пользователя c передачей 101 символа в login",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if login consists of 101 symbols\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"loginloginloginloginloginloginloginloginloginloginloginloginloginloginloginloginloginloginloginloginn\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"emaill@yandex.ru\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание пользователя c передачей строки из пробелов в login",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if login consists of spaces\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"        \",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"emaill@yandex.ru\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание пользователя c передачей строки из пробелов в password",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if password consists of spaces\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"login\",\r\n  \"password\": \"          \",\r\n  \"email\": \"emaill@yandex.ru\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание пользователя c передачей 101 символа в password",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if password consists of 101 symbols\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"login\",\r\n  \"password\": \"passwordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasss\",\r\n  \"email\": \"emaill@yandex.ru\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание пользователя c передачей 251 символа в email",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if email consists of 251 symbols\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"login\",\r\n  \"password\": \"password\",\r\n  \"email\": \"testtesttesttesttesttesttesttest@test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.com\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание пользователя c передачей строки из пробелов в email",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if email consists of spaces\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"login\",\r\n  \"password\": \"password\",\r\n  \"email\": \"       \",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание пользователя c передачей неформатного email",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if email has wrong format\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"login\",\r\n  \"password\": \"password\",\r\n  \"email\": \"email\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание пользователя c передачей неформатного dateBirth",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if dateBirth has wrong format\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"login\",\r\n  \"password\": \"password\",\r\n  \"email\": \"email@gmail.com\",\r\n  \"dateBirth\": \"14-09-1999\",\r\n  \"avatarUrl\": \"https://habr.com/ru/testurl.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание пользователя c передачей неформатного avatarUrl",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if avatarUrl has wrong format\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"login\",\r\n  \"password\": \"password\",\r\n  \"email\": \"email@gmail.com\",\r\n  \"dateBirth\": \"1999-09-09\",\r\n  \"avatarUrl\": \"url\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание пользователя c передачей 1001 символа в avatarUrl",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if avatarUrl consists of 1001 symbols\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"login\",\r\n  \"password\": \"password\",\r\n  \"email\": \"emaill@gmail.com\",\r\n  \"dateBirth\": \"1999-09-09\",\r\n  \"avatarUrl\": \"https://habr.com/ru/testurltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturlvtesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltes.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "получение информации о пользователе с вводом существующего id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Test user response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has 'userId' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('userId');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has 'name' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('name');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has 'surname' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('surname');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has 'login' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('login');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has 'email' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('email');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has 'dateBirth' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('dateBirth');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has 'dateRegistration' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('dateRegistration');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has 'avatarUrl' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('avatarUrl');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "404 получение информации о пользователе с вводом несуществующего id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/30000000",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"30000000"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Изменение информации о пользователе",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful PATCH request\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(200);\r",
+							"});\r",
+							"\r",
+							"var email = pm.response.json().email;\r",
+							"pm.environment.set(\"email2\", email);\r",
+							"\r",
+							"\r",
+							"pm.test(\"Headers is valid\", function() {\r",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');\r",
+							"    pm.expect(pm.response.headers.get('Connection')).to.eql('keep-alive')\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has 'name' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.name).to.exist.and.to.be.a('string');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"'name' length is correct\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.name.length).to.be.above(0).and.below(251);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has 'surname' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('surname');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"'Surname' length is correct\", function () {\r",
+							"     var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.surname.length).to.be.below(251);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has 'login' field\", function () {\r",
+							"     var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.login).to.exist.and.to.be.a('string');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"'Login' length is correct\", function () {\r",
+							"     var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.login.length).to.be.above(0).and.below(101);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has 'email' field\", function () {\r",
+							"     var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.email).to.exist.and.to.be.a('string');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"'email' length is correct\", function () {\r",
+							"     var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.email.length).to.be.above(0).and.below(251);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has 'avatarUrl' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('avatarUrl');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"'avatarUrl' length is correct\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.avatarUrl.length).to.be.below(1001);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has 'dateBirth' field\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.dateBirth).to.have.property;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Format of 'dateBirth' field is valid if it's not null\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.dateBirth).to.match(/^\\d{4}-\\d{2}-\\d{2}$/);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"{{$randomFirstName}}\",\r\n  \"surname\": \"{{$randomLastName}}\",\r\n  \"login\": \"{{$randomWord}}\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"{{$randomEmail}}\",\r\n  \"dateBirth\": \"2001-09-09\",\r\n  \"avatarUrl\": \"{{$randomImageUrl}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Редактирование пользователя с незаполненным name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if name is empty\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"irinasav\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"emaill@yandex.ru\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Редактирование пользователя с незаполненным login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if login is empty\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"emaill@yandex.ru\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Редактирование пользователя с незаполненным email",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if email is empty\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"login\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "404 Изменение информации о пользователе c передачей несуществующего id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Анна\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"irinasav\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"irinasav111@yandex.ru\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/5000",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"5000"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "409 Редактирование пользователя с передачей существующего email",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"409 conflict if email exists\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([409]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"irinasav\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"{{email2}}\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/3",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Редактирование пользователя с передачей строки из пробелов в name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if name consists of spaces\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"         \",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"irina\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"{{email2}}\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Редактирование пользователя с передачей цифр в name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if name consists of numbers\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"123\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"irina\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"{{email2}}\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Редактирование пользователя с передачей точки в name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if name consists of dot\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \".\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"irina\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"{{email2}}\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Редактирование пользователя с передачей запятой в name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if name consists of comma\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \",\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"irina\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"{{email2}}\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Редактирование пользователя с передачей дефиса в name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if name consists of dash\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"-\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"irina\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"{{email2}}\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Редактирование пользователя с передачей спецсимвола в name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if name consists of special symbols\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"!?\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"irina\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"{{email2}}\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Редактирование пользователя с передачей 251 символа в name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if name consists of 251 symbols\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"этооченьдлинноеимяпоэтомудолжнабытьошибкаэтооченьдлинноеимяпоэтомудолжнабытьошибкаэтооченьдлинноеимяпоэтомудолжнабытьошибкаэтооченьдлинноеимяпоэтомудолжнабытьошибкаэтооченьдлинноеимяпоэтомудолжнабытьошибкаэтооченьдлинноеимяпоэтомудолжнабытьошибкаошибк\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"irina\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"{{email2}}\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Редактирование пользователя с передачей цифр в surname",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if surname consists of numbers\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"123\",\r\n  \"login\": \"irina\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"{{email2}}\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Редактирование пользователя с передачей точки в surname",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if surname consists of dot\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \".\",\r\n  \"login\": \"irina\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"{{email2}}\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Редактирование пользователя с передачей запятой в surname",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if surname consists of comma\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \",\",\r\n  \"login\": \"irina\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"{{email2}}\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Редактирование пользователя с передачей дефиса в surname",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if surname consists of dash\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"-\",\r\n  \"login\": \"irina\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"{{email2}}\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Редактирование пользователя с передачей спецсимволов в surname",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if surname consists of special symbols\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"!&\",\r\n  \"login\": \"irina\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"{{email2}}\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Редактирование пользователя с передачей 251 символа в surname",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if surname consists of 251 symbols\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"оченьдлиннаяфамилияоченьдлиннаяфамилияоченьдлиннаяфамилияоченьдлиннаяфамилияоченьдлиннаяфамилияоченьдлиннаяфамилияоченьдлиннаяфамилияоченьдлиннаяфамилияоченьдлиннаяфамилияоченьдлиннаяфамилияоченьдлиннаяфамилияоченьдлиннаяфамилияоченьдлиннаяфамилияфами\",\r\n  \"login\": \"irina\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"{{email2}}\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Редактирование пользователя с передачей 101 символа в login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if login consists of 101 symbols\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"loginloginloginloginloginloginloginloginloginloginloginloginloginloginloginloginloginloginloginloginn\",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"{{email2}}\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Редактирование пользователя с передачей строки из пробелов в login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if login consists of  spaces\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"        \",\r\n  \"password\": \"TY89*tQW!k\",\r\n  \"email\": \"{{email2}}\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Редактирование пользователя с передачей 101 символа в password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if password consists of 101 symbols\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"login\",\r\n  \"password\": \"passwordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasss\",\r\n  \"email\": \"{{email2}}\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Редактирование пользователя с передачей 251 символа в email",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if email consists of 251 symbols\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"login\",\r\n  \"password\": \"wordpasss\",\r\n  \"email\": \"testtesttesttesttesttesttesttest@test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.com\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Редактирование пользователя с передачей строки из пробелов в email",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if email consists of spaces\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"login\",\r\n  \"password\": \"wordpasss\",\r\n  \"email\": \"        \",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Редактирование пользователя с передачей неформатного email",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if email has wrong format\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"login\",\r\n  \"password\": \"wordpasss\",\r\n  \"email\": \"email\",\r\n  \"dateBirth\": \"2000-09-14\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Редактирование пользователя с передачей неформатного dateBirth",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if dateBirth has wrong format\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"login\",\r\n  \"password\": \"wordpasss\",\r\n  \"email\": \"{{email2}}\",\r\n  \"dateBirth\": \"14-09-2000\",\r\n  \"avatarUrl\": \"https://habr.com/ru/irinasav.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Редактирование пользователя с передачей неформатного avatarUrl",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if avatarUrl has wrong format\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"login\",\r\n  \"password\": \"wordpasss\",\r\n  \"email\": \"{{email2}}\",\r\n  \"dateBirth\": \"2000-09-09\",\r\n  \"avatarUrl\": \"url\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Редактирование пользователя с передачей 1001 символа в avatarUrl",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 if avatarUrl consists of 1001 symbols\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ирина\",\r\n  \"surname\": \"Савельева\",\r\n  \"login\": \"login\",\r\n  \"password\": \"wordpasss\",\r\n  \"email\": \"{{email2}}\",\r\n  \"dateBirth\": \"2000-09-09\",\r\n  \"avatarUrl\": \"https://habr.com/ru/testurltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturlvtesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltes.jpgl\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Создание урока для пользователя",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var responseJson = pm.response.json();",
+							"var idLesson = responseJson.idLesson;",
+							"pm.environment.set(\"idLesson\", idLesson);",
+							"",
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Test user response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"pm.test(\"Response has 'idLesson' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('idLesson');",
+							"});",
+							"",
+							"pm.test(\"Response has 'subject' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('subject');",
+							"});",
+							"",
+							"pm.test(\"Response has 'idSubject' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.subject).to.have.property('idSubject');",
+							"});",
+							"",
+							"pm.test(\"Response has 'name' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.subject).to.have.property('name');",
+							"});",
+							"",
+							"pm.test(\"Response has 'topic' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('topic');",
+							"});",
+							"",
+							"pm.test(\"'topic' length is between 1 and 500 characters\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.practiceUrl.length).to.be.within(1, 500);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has 'date' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('date');",
+							"});",
+							"",
+							"pm.test(\"Format of 'Birth' field is valid\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.date).to.match(/^\\d{4}-\\d{2}-\\d{2}$/);",
+							"});",
+							"",
+							"pm.test(\"Response has 'timesStart' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('timeStart');",
+							"});",
+							"",
+							"pm.test(\"Response has 'timeEnd' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('timeEnd');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has 'theoryUrl' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('theoryUrl');",
+							"});",
+							"",
+							"pm.test(\"'theoryUrl' length is between 0 and 1000 characters\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.theoryUrl.length).to.be.within(0, 1000);",
+							"});",
+							"",
+							"pm.test(\"Response has 'practiceUrl' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('practiceUrl');",
+							"});",
+							"",
+							"pm.test(\"'practiceUrl' length is between 0 and 1000 characters\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.practiceUrl.length).to.be.within(0, 1000);",
+							"});",
+							"",
+							"pm.test(\"Response has 'homeworkUrl' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('homeworkUrl');",
+							"});",
+							"",
+							"pm.test(\"'homeworkUrl' length is between 0 and 1000 characters\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.homeworkUrl.length).to.be.within(0, 1000);",
+							"});",
+							"",
+							"pm.test(\"Response has 'progress' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('progress');",
+							"});",
+							"",
+							"pm.test(\"Progress is either null or between 0 and 100\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.progress).to.be.oneOf([null, ...Array.from(Array(101).keys())]);",
+							"})",
+							"",
+							"pm.test(\"Response has 'checkSuccessfully' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('checkSuccessfully');",
+							"});",
+							"",
+							"pm.test(\"checkSuccessfully is either null, true or false\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.checkSuccessfully).to.be.oneOf([null, true, false]);",
+							"})",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"randomnum\", _.random(0, 100))"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 3\r\n  },\r\n  \"topic\": \"{{$randomNoun}}\",\r\n  \"date\": \"2023-09-14\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"{{$randomUrl}}\",\r\n  \"practiceUrl\": \"{{$randomUrl}}\",\r\n  \"homeworkUrl\": \"{{$randomUrl}}\",\r\n  \"progress\": {{randomnum}},\r\n  \"checkSuccessfully\": {{$randomBoolean}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "404 Создание урока для пользователя с передачей несуществующего idUser",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 3\r\n  },\r\n  \"topic\": \"topic\",\r\n  \"date\": \"2023-09-14\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"https://habr.com/ru/theoryUrl.htm\",\r\n  \"practiceUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"homeworkUrl\": \"https://habr.com/ru/homeworkUrl.htm\",\r\n  \"progress\": 100,\r\n  \"checkSuccessfully\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/4000000/lessons",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"4000000",
+						"lessons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание урока для пользователя с передачей null в idSubject",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if idSubject is null\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": null\r\n  },\r\n  \"topic\": \"topic\",\r\n  \"date\": \"2023-09-14\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"https://habr.com/ru/theoryUrl.htm\",\r\n  \"practiceUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"homeworkUrl\": \"https://habr.com/ru/homeworkUrl.htm\",\r\n  \"progress\": 100,\r\n  \"checkSuccessfully\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание урока для пользователя с передачей null в Subject",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if Subject is null\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": null,\r\n  \"topic\": \"topic\",\r\n  \"date\": \"2023-09-14\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"https://habr.com/ru/theoryUrl.htm\",\r\n  \"practiceUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"homeworkUrl\": \"https://habr.com/ru/homeworkUrl.htm\",\r\n  \"progress\": 100,\r\n  \"checkSuccessfully\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание урока для пользователя с передачей {} в Subject",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if idSubject is {}\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {},\r\n  \"topic\": \"topic\",\r\n  \"date\": \"2023-09-14\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"https://habr.com/ru/theoryUrl.htm\",\r\n  \"practiceUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"homeworkUrl\": \"https://habr.com/ru/homeworkUrl.htm\",\r\n  \"progress\": 100,\r\n  \"checkSuccessfully\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "404 Создание урока для пользователя с передачей несуществующего idSubject",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404 if idSubject doesn't exists\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 500\r\n  },\r\n  \"topic\": \"{{$randomNoun}}\",\r\n  \"date\": \"2023-09-14\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"{{$randomUrl}}\",\r\n  \"practiceUrl\": \"{{$randomUrl}}\",\r\n  \"homeworkUrl\": \"{{$randomUrl}}\",\r\n  \"progress\": {{randomnum}},\r\n  \"checkSuccessfully\": {{$randomBoolean}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание урока для пользователя с передачей пустого topic",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if topic is null\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 4\r\n  },\r\n  \"topic\": \"\",\r\n  \"date\": \"2023-09-14\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"https://habr.com/ru/theoryUrl.htm\",\r\n  \"practiceUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"homeworkUrl\": \"https://habr.com/ru/homeworkUrl.htm\",\r\n  \"progress\": 100,\r\n  \"checkSuccessfully\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание урока для пользователя с передачей пустого date",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if date is null\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 4\r\n  },\r\n  \"topic\": \"topic\",\r\n  \"date\": \"\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"https://habr.com/ru/theoryUrl.htm\",\r\n  \"practiceUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"homeworkUrl\": \"https://habr.com/ru/homeworkUrl.htm\",\r\n  \"progress\": 100,\r\n  \"checkSuccessfully\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание урока для пользователя с передачей пустого timeStart",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if timeStart is null\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 4\r\n  },\r\n  \"topic\": \"topic\",\r\n  \"date\": \"2023-09-14\",\r\n  \"timeStart\": \"\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"https://habr.com/ru/theoryUrl.htm\",\r\n  \"practiceUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"homeworkUrl\": \"https://habr.com/ru/homeworkUrl.htm\",\r\n  \"progress\": 100,\r\n  \"checkSuccessfully\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание урока для пользователя с передачей пустого timeEnd",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if timeEnd is null\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 4\r\n  },\r\n  \"topic\": \"topic\",\r\n  \"date\": \"2023-09-14\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"\",\r\n  \"theoryUrl\": \"https://habr.com/ru/theoryUrl.htm\",\r\n  \"practiceUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"homeworkUrl\": \"https://habr.com/ru/homeworkUrl.htm\",\r\n  \"progress\": 100,\r\n  \"checkSuccessfully\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание урока для пользователя с передачей 501 символа в topic",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if topic consists of 501 symbols\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 4\r\n  },\r\n  \"topic\": \"topictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopicс\",\r\n  \"date\": \"2023-09-14\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"https://habr.com/ru/theoryUrl.htm\",\r\n  \"practiceUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"homeworkUrl\": \"https://habr.com/ru/homeworkUrl.htm\",\r\n  \"progress\": 100,\r\n  \"checkSuccessfully\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание урока для пользователя с передачей неформатного date",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if date has wrong format\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 4\r\n  },\r\n  \"topic\": \"topic\",\r\n  \"date\": \"09-09-2000\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"https://habr.com/ru/theoryUrl.htm\",\r\n  \"practiceUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"homeworkUrl\": \"https://habr.com/ru/homeworkUrl.htm\",\r\n  \"progress\": 100,\r\n  \"checkSuccessfully\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание урока для пользователя с передачей неформатного timeStart",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if timeStart has wrong format\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 4\r\n  },\r\n  \"topic\": \"topic\",\r\n  \"date\": \"2000-09-09\",\r\n  \"timeStart\": \"09:65:65\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"https://habr.com/ru/theoryUrl.htm\",\r\n  \"practiceUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"homeworkUrl\": \"https://habr.com/ru/homeworkUrl.htm\",\r\n  \"progress\": 100,\r\n  \"checkSuccessfully\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание урока для пользователя с передачей неформатного timeEnd",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 timeEnd has wrong format\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 4\r\n  },\r\n  \"topic\": \"topic\",\r\n  \"date\": \"2000-09-09\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:400:00\",\r\n  \"theoryUrl\": \"https://habr.com/ru/theoryUrl.htm\",\r\n  \"practiceUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"homeworkUrl\": \"https://habr.com/ru/homeworkUrl.htm\",\r\n  \"progress\": 100,\r\n  \"checkSuccessfully\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание урока для пользователя с передачей неформатного theoryUrl",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if theoryUrl has wrong format\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 4\r\n  },\r\n  \"topic\": \"topic\",\r\n  \"date\": \"2000-09-09\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"url\",\r\n  \"practiceUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"homeworkUrl\": \"https://habr.com/ru/homeworkUrl.htm\",\r\n  \"progress\": 100,\r\n  \"checkSuccessfully\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание урока для пользователя с передачей 1001 символа в theoryUrl",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if theoryUrl consists of 1001 symbols\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 4\r\n  },\r\n  \"topic\": \"topic\",\r\n  \"date\": \"2000-09-09\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"https://habr.com/ru/testurltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturlvtesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltes.jpg\",\r\n  \"practiceUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"homeworkUrl\": \"https://habr.com/ru/homeworkUrl.htm\",\r\n  \"progress\": 100,\r\n  \"checkSuccessfully\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание урока для пользователя с передачей неформатного practiceUrl",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if practiceUrl has wrong format\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 4\r\n  },\r\n  \"topic\": \"topic\",\r\n  \"date\": \"2000-09-09\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"practiceUrl\": \"url\",\r\n  \"homeworkUrl\": \"https://habr.com/ru/homeworkUrl.htm\",\r\n  \"progress\": 100,\r\n  \"checkSuccessfully\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание урока для пользователя с передачей 1001 символа в practiceUrl",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if practiceUrl consists of 1001 symbols\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 4\r\n  },\r\n  \"topic\": \"topic\",\r\n  \"date\": \"2000-09-09\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"practiceUrl\": \"https://habr.com/ru/testurltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturlvtesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltes.jpg\",\r\n  \"homeworkUrl\": \"https://habr.com/ru/homeworkUrl.htm\",\r\n  \"progress\": 100,\r\n  \"checkSuccessfully\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание урока для пользователя с передачей неформатного homeworkUrl",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if homeworkUrl has wrong format\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 4\r\n  },\r\n  \"topic\": \"topic\",\r\n  \"date\": \"2000-09-09\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"practiceUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"homeworkUrl\": \"url\",\r\n  \"progress\": 100,\r\n  \"checkSuccessfully\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание урока для пользователя с передачей 1001 символа homeworkUrl",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if homeworkUrl consists of 1001 symbols\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 4\r\n  },\r\n  \"topic\": \"topic\",\r\n  \"date\": \"2000-09-09\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"practiceUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"homeworkUrl\": \"https://habr.com/ru/testurltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturlvtesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltes.jpg\",\r\n  \"progress\": 100,\r\n  \"checkSuccessfully\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание урока для пользователя с передачей -1 в progress",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if progress is less then 0\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"randomnum\", _.random(0, 100))"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 3\r\n  },\r\n  \"topic\": \"{{$randomNoun}}\",\r\n  \"date\": \"2023-09-14\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"{{$randomUrl}}\",\r\n  \"practiceUrl\": \"{{$randomUrl}}\",\r\n  \"homeworkUrl\": \"{{$randomUrl}}\",\r\n  \"progress\": -1,\r\n  \"checkSuccessfully\": {{$randomBoolean}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание урока для пользователя с передачей 101 в progress",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if progress is more than 100\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"randomnum\", _.random(0, 100))"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 3\r\n  },\r\n  \"topic\": \"{{$randomNoun}}\",\r\n  \"date\": \"2023-09-14\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"{{$randomUrl}}\",\r\n  \"practiceUrl\": \"{{$randomUrl}}\",\r\n  \"homeworkUrl\": \"{{$randomUrl}}\",\r\n  \"progress\": 101,\r\n  \"checkSuccessfully\": {{$randomBoolean}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 Создание урока для пользователя с передачей неформатного checkSuccessfully",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if checkSuccessfully has wrong format\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 3\r\n  },\r\n  \"topic\": \"{{$randomNoun}}\",\r\n  \"date\": \"2023-09-14\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"{{$randomUrl}}\",\r\n  \"practiceUrl\": \"{{$randomUrl}}\",\r\n  \"homeworkUrl\": \"{{$randomUrl}}\",\r\n  \"progress\": 100,\r\n  \"checkSuccessfully\": \"real\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Получение информации об уроках пользователя",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Test user response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"pm.test(\"Response has 'idLesson' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[0]).to.have.property('idLesson');",
+							"});",
+							"",
+							"pm.test(\"Response has 'subject' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[0]).to.have.property('subject');",
+							"});",
+							"",
+							"pm.test(\"Response has 'idSubject' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[0].subject).to.have.property('idSubject');",
+							"});",
+							"",
+							"pm.test(\"Response has 'name' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[0].subject).to.have.property('name');",
+							"});",
+							"",
+							"pm.test(\"Response has 'topic' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[0]).to.have.property('topic');",
+							"});",
+							"",
+							"pm.test(\"Response has 'date' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[0]).to.have.property('date');",
+							"});",
+							"",
+							"pm.test(\"Response has 'timesStart' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[0]).to.have.property('timeStart');",
+							"});",
+							"",
+							"pm.test(\"Response has 'timeEnd' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[0]).to.have.property('timeEnd');",
+							"});",
+							"",
+							"pm.test(\"Response has 'progress' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[0]).to.have.property('progress');",
+							"});",
+							"",
+							"pm.test(\"Response has 'checkSuccessfully' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[0]).to.have.property('checkSuccessfully');",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons?from=2020-09-18&&to=2023-12-31",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "2020-09-18"
+						},
+						{
+							"key": null,
+							"value": null
+						},
+						{
+							"key": "to",
+							"value": "2023-12-31"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "404 Получение информации об уроках пользователя с передачей несуществующего id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/10000/lessons",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"10000",
+						"lessons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Получение информации о конкретном уроке пользователя",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Test user response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"pm.test(\"Response has 'idLesson' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('idLesson');",
+							"});",
+							"",
+							"pm.test(\"Response has 'subject' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('subject');",
+							"});",
+							"",
+							"pm.test(\"Response has 'idSubject' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.subject).to.have.property('idSubject');",
+							"});",
+							"",
+							"pm.test(\"Response has 'name' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.subject).to.have.property('name');",
+							"});",
+							"",
+							"pm.test(\"Response has 'topic' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('topic');",
+							"});",
+							"",
+							"pm.test(\"Response has 'date' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('date');",
+							"});",
+							"",
+							"pm.test(\"Response has 'timesStart' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('timeStart');",
+							"});",
+							"",
+							"pm.test(\"Response has 'timeEnd' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('timeEnd');",
+							"});",
+							"",
+							"pm.test(\"Response has 'progress' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('progress');",
+							"});",
+							"",
+							"pm.test(\"Response has 'checkSuccessfully' field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('checkSuccessfully');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons/{{idLesson}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons",
+						"{{idLesson}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "404 Получение информации о конкретном уроке пользователя с передачей несуществующего id пользователя",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/3000/lessons/{{idLesson}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"3000",
+						"lessons",
+						"{{idLesson}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "404 Получение информации о конкретном уроке пользователя с передачей несуществующего id урока",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons/10000",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons",
+						"10000"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "изменение информации об уроке",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 3\r\n  },\r\n  \"topic\": \"{{$randomNoun}}\",\r\n  \"date\": \"2023-09-14\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"{{$randomUrl}}\",\r\n  \"practiceUrl\": \"{{$randomUrl}}\",\r\n  \"homeworkUrl\": \"{{$randomUrl}}\",\r\n  \"progress\": {{randomnum}},\r\n  \"checkSuccessfully\": {{$randomBoolean}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons/{{idLesson}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons",
+						"{{idLesson}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "404 изменение информации об уроке с передачей несуществующего idUser",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 3\r\n  },\r\n  \"topic\": \"{{$randomNoun}}\",\r\n  \"date\": \"2023-09-14\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"{{$randomUrl}}\",\r\n  \"practiceUrl\": \"{{$randomUrl}}\",\r\n  \"homeworkUrl\": \"{{$randomUrl}}\",\r\n  \"progress\": {{randomnum}},\r\n  \"checkSuccessfully\": {{$randomBoolean}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/1000000000000000/lessons/{{idLesson}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"1000000000000000",
+						"lessons",
+						"{{idLesson}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "404 изменение информации об уроке с передачей несуществующего idLesson",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 3\r\n  },\r\n  \"topic\": \"{{$randomNoun}}\",\r\n  \"date\": \"2023-09-14\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"{{$randomUrl}}\",\r\n  \"practiceUrl\": \"{{$randomUrl}}\",\r\n  \"homeworkUrl\": \"{{$randomUrl}}\",\r\n  \"progress\": {{randomnum}},\r\n  \"checkSuccessfully\": {{$randomBoolean}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons/100000000000000",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons",
+						"100000000000000"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 изменение информации об уроке с передачей пустого idSubject",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if idSubject is null\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": null\r\n  },\r\n  \"topic\": \"topic\",\r\n  \"date\": \"2023-09-14\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"https://habr.com/ru/theoryUrl.htm\",\r\n  \"practiceUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"homeworkUrl\": \"https://habr.com/ru/homeworkUrl.htm\",\r\n  \"progress\": 100,\r\n  \"checkSuccessfully\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons/{{idLesson}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons",
+						"{{idLesson}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 изменение информации об уроке с передачей null в Subject",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if Subject is null\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": null,\r\n  \"topic\": \"topic\",\r\n  \"date\": \"2023-09-14\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"https://habr.com/ru/theoryUrl.htm\",\r\n  \"practiceUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"homeworkUrl\": \"https://habr.com/ru/homeworkUrl.htm\",\r\n  \"progress\": 100,\r\n  \"checkSuccessfully\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons/{{idLesson}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons",
+						"{{idLesson}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 изменение информации об уроке с передачей {} в Subject",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if Subject is {}\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {},\r\n  \"topic\": \"topic\",\r\n  \"date\": \"2023-09-14\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"https://habr.com/ru/theoryUrl.htm\",\r\n  \"practiceUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"homeworkUrl\": \"https://habr.com/ru/homeworkUrl.htm\",\r\n  \"progress\": 100,\r\n  \"checkSuccessfully\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons/{{idLesson}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons",
+						"{{idLesson}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "404 Изменение информации об уроке с передачей несуществующего idSubject",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404 if idSubject doesn't exists\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"randomnum\", _.random(0, 100))"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 500\r\n  },\r\n  \"topic\": \"{{$randomNoun}}\",\r\n  \"date\": \"2023-09-14\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"{{$randomUrl}}\",\r\n  \"practiceUrl\": \"{{$randomUrl}}\",\r\n  \"homeworkUrl\": \"{{$randomUrl}}\",\r\n  \"progress\": {{randomnum}},\r\n  \"checkSuccessfully\": {{$randomBoolean}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons/{{idLesson}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons",
+						"{{idLesson}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 изменение информации об уроке с передачей пустого topic",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if topic is empty\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 4\r\n  },\r\n  \"topic\": \"\",\r\n  \"date\": \"2023-09-14\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"https://habr.com/ru/theoryUrl.htm\",\r\n  \"practiceUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"homeworkUrl\": \"https://habr.com/ru/homeworkUrl.htm\",\r\n  \"progress\": 100,\r\n  \"checkSuccessfully\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons/{{idLesson}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons",
+						"{{idLesson}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 изменение информации об уроке с передачей пустого date",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if date is empty\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 4\r\n  },\r\n  \"topic\": \"topic\",\r\n  \"date\": \"\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"https://habr.com/ru/theoryUrl.htm\",\r\n  \"practiceUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"homeworkUrl\": \"https://habr.com/ru/homeworkUrl.htm\",\r\n  \"progress\": 100,\r\n  \"checkSuccessfully\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons/{{idLesson}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons",
+						"{{idLesson}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 изменение информации об уроке с передачей пустого timeStart",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if timeStart is empty\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 4\r\n  },\r\n  \"topic\": \"topic\",\r\n  \"date\": \"2023-09-14\",\r\n  \"timeStart\": \"\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"https://habr.com/ru/theoryUrl.htm\",\r\n  \"practiceUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"homeworkUrl\": \"https://habr.com/ru/homeworkUrl.htm\",\r\n  \"progress\": 100,\r\n  \"checkSuccessfully\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons/{{idLesson}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons",
+						"{{idLesson}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 изменение информации об уроке с передачей пустого timeEnd",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if timeEnd is empty\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 4\r\n  },\r\n  \"topic\": \"topic\",\r\n  \"date\": \"2023-09-14\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"\",\r\n  \"theoryUrl\": \"https://habr.com/ru/theoryUrl.htm\",\r\n  \"practiceUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"homeworkUrl\": \"https://habr.com/ru/homeworkUrl.htm\",\r\n  \"progress\": 100,\r\n  \"checkSuccessfully\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons/{{idLesson}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons",
+						"{{idLesson}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 изменение информации об уроке с передачей 501 символа в topic",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if topic consists of 501 symbols\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 4\r\n  },\r\n  \"topic\": \"topictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopictopicс\",\r\n  \"date\": \"2023-09-14\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"https://habr.com/ru/theoryUrl.htm\",\r\n  \"practiceUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"homeworkUrl\": \"https://habr.com/ru/homeworkUrl.htm\",\r\n  \"progress\": 100,\r\n  \"checkSuccessfully\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons/{{idLesson}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons",
+						"{{idLesson}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 изменение информации об уроке с передачей неформатного date",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if date has wrong format\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 4\r\n  },\r\n  \"topic\": \"topic\",\r\n  \"date\": \"09-09-2000\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"https://habr.com/ru/theoryUrl.htm\",\r\n  \"practiceUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"homeworkUrl\": \"https://habr.com/ru/homeworkUrl.htm\",\r\n  \"progress\": 100,\r\n  \"checkSuccessfully\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons/{{idLesson}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons",
+						"{{idLesson}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 изменение информации об уроке с передачей неформатного timeStart",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if timeStart has wrong format\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 4\r\n  },\r\n  \"topic\": \"topic\",\r\n  \"date\": \"2000-09-09\",\r\n  \"timeStart\": \"09:65:65\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"https://habr.com/ru/theoryUrl.htm\",\r\n  \"practiceUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"homeworkUrl\": \"https://habr.com/ru/homeworkUrl.htm\",\r\n  \"progress\": 100,\r\n  \"checkSuccessfully\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons/{{idLesson}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons",
+						"{{idLesson}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 изменение информации об уроке с передачей неформатного timeEnd",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 timeEnd has wrong format\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 4\r\n  },\r\n  \"topic\": \"topic\",\r\n  \"date\": \"2000-09-09\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:400:00\",\r\n  \"theoryUrl\": \"https://habr.com/ru/theoryUrl.htm\",\r\n  \"practiceUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"homeworkUrl\": \"https://habr.com/ru/homeworkUrl.htm\",\r\n  \"progress\": 100,\r\n  \"checkSuccessfully\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons/{{idLesson}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons",
+						"{{idLesson}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 изменение информации об уроке с передачей неформатного theoryUrl",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if theoryUrl has wrong format\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 4\r\n  },\r\n  \"topic\": \"topic\",\r\n  \"date\": \"2000-09-09\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"url\",\r\n  \"practiceUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"homeworkUrl\": \"https://habr.com/ru/homeworkUrl.htm\",\r\n  \"progress\": 100,\r\n  \"checkSuccessfully\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons/{{idLesson}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons",
+						"{{idLesson}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 изменение информации об уроке с передачей 1001 символа в theoryUrl",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if theoryUrl consists of 1001 symbols\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 4\r\n  },\r\n  \"topic\": \"topic\",\r\n  \"date\": \"2000-09-09\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"https://habr.com/ru/testurltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturlvtesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltes.jpg\",\r\n  \"practiceUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"homeworkUrl\": \"https://habr.com/ru/homeworkUrl.htm\",\r\n  \"progress\": 100,\r\n  \"checkSuccessfully\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons/{{idLesson}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons",
+						"{{idLesson}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 изменение информации об уроке с передачей неформатного practiceUrl",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if practiceUrl has wrong format\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 4\r\n  },\r\n  \"topic\": \"topic\",\r\n  \"date\": \"2000-09-09\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"practiceUrl\": \"url\",\r\n  \"homeworkUrl\": \"https://habr.com/ru/homeworkUrl.htm\",\r\n  \"progress\": 100,\r\n  \"checkSuccessfully\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons/{{idLesson}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons",
+						"{{idLesson}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 изменение информации об уроке с передачей 1001 символа в practiceUrl",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if practiceUrl consists of 1001 symbols\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 4\r\n  },\r\n  \"topic\": \"topic\",\r\n  \"date\": \"2000-09-09\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"practiceUrl\": \"https://habr.com/ru/testurltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturlvtesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltes.jpg\",\r\n  \"homeworkUrl\": \"https://habr.com/ru/homeworkUrl.htm\",\r\n  \"progress\": 100,\r\n  \"checkSuccessfully\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons/{{idLesson}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons",
+						"{{idLesson}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 изменение информации об уроке с передачей неформатного homeworkUrl",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if homeworkUrl has wrong format\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 4\r\n  },\r\n  \"topic\": \"topic\",\r\n  \"date\": \"2000-09-09\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"practiceUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"homeworkUrl\": \"url\",\r\n  \"progress\": 100,\r\n  \"checkSuccessfully\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons/{{idLesson}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons",
+						"{{idLesson}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 изменение информации об уроке с передачей 1001 символа homeworkUrl",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if homeworkUrl consists of 1001 symbols\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 4\r\n  },\r\n  \"topic\": \"topic\",\r\n  \"date\": \"2000-09-09\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"practiceUrl\": \"https://habr.com/ru/practiceUrl.htm\",\r\n  \"homeworkUrl\": \"https://habr.com/ru/testurltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturlvtesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltesturltes.jpg\",\r\n  \"progress\": 100,\r\n  \"checkSuccessfully\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons/{{idLesson}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons",
+						"{{idLesson}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 изменение информации об уроке с передачей -1 в progress",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if progress is less then 0\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"randomnum\", _.random(0, 100))"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 3\r\n  },\r\n  \"topic\": \"{{$randomNoun}}\",\r\n  \"date\": \"2023-09-14\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"{{$randomUrl}}\",\r\n  \"practiceUrl\": \"{{$randomUrl}}\",\r\n  \"homeworkUrl\": \"{{$randomUrl}}\",\r\n  \"progress\": -1,\r\n  \"checkSuccessfully\": {{$randomBoolean}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons/{{idLesson}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons",
+						"{{idLesson}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 изменение информации об уроке с передачей 101 в progress",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if progress is more than 100\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"randomnum\", _.random(0, 100))"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 3\r\n  },\r\n  \"topic\": \"{{$randomNoun}}\",\r\n  \"date\": \"2023-09-14\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"{{$randomUrl}}\",\r\n  \"practiceUrl\": \"{{$randomUrl}}\",\r\n  \"homeworkUrl\": \"{{$randomUrl}}\",\r\n  \"progress\": 101,\r\n  \"checkSuccessfully\": {{$randomBoolean}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons/{{idLesson}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons",
+						"{{idLesson}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 изменение информации с передачей неформатного checkSuccessfully",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 if checkSuccessfully has wrong format\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Has error response\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": {\r\n    \"idSubject\": 3\r\n  },\r\n  \"topic\": \"{{$randomNoun}}\",\r\n  \"date\": \"2023-09-14\",\r\n  \"timeStart\": \"09:40:00\",\r\n  \"timeEnd\": \"09:40:00\",\r\n  \"theoryUrl\": \"{{$randomUrl}}\",\r\n  \"practiceUrl\": \"{{$randomUrl}}\",\r\n  \"homeworkUrl\": \"{{$randomUrl}}\",\r\n  \"progress\": 100,\r\n  \"checkSuccessfully\": \"real\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons/{{idLesson}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons",
+						"{{idLesson}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "404 Удаление урока с передачей несуществующего idUser",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/10000000000/lessons/{{idLesson}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"10000000000",
+						"lessons",
+						"{{idLesson}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Удаление урока",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "404 Удаление урока с передачей несуществующего LessonId",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has error response\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://195.161.68.231:8080/users/{{idUser}}/lessons/{{idLesson}}",
+					"protocol": "http",
+					"host": [
+						"195",
+						"161",
+						"68",
+						"231"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{{idUser}}",
+						"lessons",
+						"{{idLesson}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "randomnum",
+			"value": ""
+		}
+	]
+}
