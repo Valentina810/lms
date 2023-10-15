@@ -13,12 +13,21 @@ import java.time.LocalDate;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserResponseDto {
+public class FullUserDto {
+
     private Long userId;
+
     private String name;
+
     private String surname;
+
     private String login;
+
     private String email;
+
     private LocalDate dateBirth;
+
+    private LocalDate dateRegistration;
+
     private String avatarUrl;
 }

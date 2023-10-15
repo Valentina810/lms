@@ -13,13 +13,11 @@ import com.valentinakole.lms.repository.LessonRepository;
 import com.valentinakole.lms.repository.SubjectRepository;
 import com.valentinakole.lms.repository.UserRepository;
 import com.valentinakole.lms.service.LessonService;
-import com.valentinakole.lms.util.validate.ErrorsValidationChecker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.BindingResult;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -67,8 +65,7 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public FullLessonDto addLesson(long userId, LessonCreateDto lessonCreateDto, BindingResult bindingResult) {
-        ErrorsValidationChecker.checkValidationErrors(bindingResult);
+    public FullLessonDto addLesson(long userId, LessonCreateDto lessonCreateDto) {
         User user = userRepository.findById(userId).orElseThrow(() ->
                 new NotFoundException("Пользователь", userId));
         Long subjectId = lessonCreateDto.getSubject().getIdSubject();
@@ -86,8 +83,7 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public FullLessonDto updateLesson(long userId, long lessonId, LessonCreateDto lessonCreateDto, BindingResult bindingResult) {
-        ErrorsValidationChecker.checkValidationErrors(bindingResult);
+    public FullLessonDto updateLesson(long userId, long lessonId, LessonCreateDto lessonCreateDto) {
         Optional<Lesson> lessonByUserId = lessonRepository.findLessonByUserId(userId, lessonId);
         if (lessonByUserId.isPresent()) {
             Lesson updateLesson = lessonMapper.toLesson(lessonCreateDto);

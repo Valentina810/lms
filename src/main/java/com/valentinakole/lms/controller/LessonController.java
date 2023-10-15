@@ -4,6 +4,7 @@ import com.valentinakole.lms.dto.lesson.FullLessonDto;
 import com.valentinakole.lms.dto.lesson.LessonCreateDto;
 import com.valentinakole.lms.dto.lesson.ShortLessonDto;
 import com.valentinakole.lms.service.LessonService;
+import com.valentinakole.lms.util.validate.ErrorsValidationChecker;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
@@ -56,7 +57,8 @@ public class LessonController {
     @Operation(summary = "Создание нового урока для пользователя")
     public FullLessonDto addLesson(@PathVariable long userId,
                                    @Valid @RequestBody LessonCreateDto lessonCreateDto, BindingResult bindingResult) {
-        return lessonService.addLesson(userId, lessonCreateDto, bindingResult);
+        ErrorsValidationChecker.checkValidationErrors(bindingResult);
+        return lessonService.addLesson(userId, lessonCreateDto);
     }
 
     @PatchMapping("{lessonId}")
@@ -64,7 +66,8 @@ public class LessonController {
     public FullLessonDto updateLesson(@PathVariable long userId,
                                       @PathVariable long lessonId,
                                       @Valid @RequestBody LessonCreateDto lessonCreateDto, BindingResult bindingResult) {
-        return lessonService.updateLesson(userId, lessonId, lessonCreateDto, bindingResult);
+        ErrorsValidationChecker.checkValidationErrors(bindingResult);
+        return lessonService.updateLesson(userId, lessonId, lessonCreateDto);
     }
 
     @DeleteMapping("{lessonId}")

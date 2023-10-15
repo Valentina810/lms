@@ -1,15 +1,13 @@
 package com.valentinakole.lms.service;
 
-import com.valentinakole.lms.model.User;
-
-import java.util.Optional;
+import com.valentinakole.lms.dto.user.FullUserDto;
+import com.valentinakole.lms.dto.user.UserCreateDto;
+import com.valentinakole.lms.dto.user.UserUpdateDto;
 
 public interface UserService {
-    User findById(long id);
+    FullUserDto findById(long id);
 
-    User create(User user);
+    FullUserDto create(UserCreateDto userCreateDto);
 
-    User update(long id, User updatedUser);
-
-    Optional<User> findByEmail(String email);
+    FullUserDto update(long id, UserUpdateDto userUpdateDto);
 }

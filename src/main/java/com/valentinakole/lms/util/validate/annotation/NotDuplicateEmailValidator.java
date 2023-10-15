@@ -1,19 +1,19 @@
 package com.valentinakole.lms.util.validate.annotation;
 
-import com.valentinakole.lms.service.impl.UserServiceImpl;
+import com.valentinakole.lms.repository.UserRepository;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class NotDuplicateEmailValidator implements ConstraintValidator<NotDuplicateEmail, String> {
 
-    private final UserServiceImpl userService;
+    private final UserRepository userRepository;
 
-    public NotDuplicateEmailValidator(UserServiceImpl userService) {
-        this.userService = userService;
+    public NotDuplicateEmailValidator(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        return value == null || userService.findByEmail(value).isEmpty();
+        return value == null || userRepository.findByEmail(value).isEmpty();
     }
 }
