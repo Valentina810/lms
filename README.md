@@ -34,6 +34,9 @@ https://github.com/Valentina810/lms
 
  https://docs.google.com/spreadsheets/d/1uZvrsg0FlwcaEs_8QjwqR4Y30nDS6iXhEKmZsSqvBKs/edit#gid=0
 
+ Коллекция postman
+ https://github.com/Valentina810/lms/blob/main/lms%20USER-LESSON-CONTROLLERS.postman_collection.json
+
 ## Доска
 
 https://github.com/users/Valentina810/projects/1
