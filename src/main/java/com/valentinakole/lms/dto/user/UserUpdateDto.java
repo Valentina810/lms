@@ -1,6 +1,5 @@
 package com.valentinakole.lms.dto.user;
 
-import com.valentinakole.lms.util.validate.annotation.NotDuplicateEmail;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
@@ -12,7 +11,6 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.URL;
 
-import static com.valentinakole.lms.util.validate.ValidationMessage.DUPLICATE_EMAIL;
 import static com.valentinakole.lms.util.validate.ValidationMessage.INCORRECT_FORMAT_EMAIL;
 import static com.valentinakole.lms.util.validate.ValidationMessage.INCORRECT_JSON_OBJECT;
 import static com.valentinakole.lms.util.validate.ValidationMessage.INCORRECT_LENGTH_EMAIL;
@@ -53,7 +51,6 @@ public class UserUpdateDto {
     @Schema(description = "Пароль", example = "TY89*tQW!k")
     private String password;
 
-    @NotDuplicateEmail(message = DUPLICATE_EMAIL)
     @Size(max = 250, message = INCORRECT_LENGTH_EMAIL)
     @Email(message = INCORRECT_FORMAT_EMAIL)
     @Schema(description = "Email", example = "irinasav@yandex.ru")

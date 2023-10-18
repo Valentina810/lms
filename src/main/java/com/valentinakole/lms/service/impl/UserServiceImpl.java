@@ -3,6 +3,7 @@ package com.valentinakole.lms.service.impl;
 import com.valentinakole.lms.dto.user.FullUserDto;
 import com.valentinakole.lms.dto.user.UserCreateDto;
 import com.valentinakole.lms.dto.user.UserUpdateDto;
+import com.valentinakole.lms.exception.errors.EmailExistError;
 import com.valentinakole.lms.exception.errors.NotFoundException;
 import com.valentinakole.lms.mapper.UserMapper;
 import com.valentinakole.lms.model.User;
@@ -18,7 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
+
+import static com.valentinakole.lms.util.validate.ValidationMessage.DUPLICATE_EMAIL;
 
 @Slf4j
 @Service
@@ -48,10 +52,23 @@ public class UserServiceImpl implements UserService {
     public FullUserDto update(long id, UserUpdateDto userUpdateDto) {
         User oldUser = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Пользователь", id));
-        User newUser = userMapper.toUser(userUpdateDto);
-        newUser.setUserId(id);
-        BeanUtils.copyProperties(newUser, oldUser, getNullPropertyNames(newUser));
+        User updatedUser = userMapper.toUser(userUpdateDto);
+        updatedUser.setUserId(id);
+        if (isEmailUnique(updatedUser)) {
+            throw new EmailExistError(DUPLICATE_EMAIL);
+        }
+        BeanUtils.copyProperties(updatedUser, oldUser, getNullPropertyNames(updatedUser));
         return userMapper.toFullUserDto(userRepository.save(oldUser));
+    }
+
+    private boolean isEmailUnique(User updatedUser) {
+        if (updatedUser.getEmail() != null) {
+            Optional<User> user = userRepository.findByEmail(updatedUser.getEmail());
+            if (user.isPresent()) {
+                return !user.get().getUserId().equals(updatedUser.getUserId());
+            }
+        }
+        return false;
     }
 
     private String[] getNullPropertyNames(Object source) {
