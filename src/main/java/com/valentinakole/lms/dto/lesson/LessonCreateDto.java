@@ -2,7 +2,6 @@ package com.valentinakole.lms.dto.lesson;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.valentinakole.lms.model.Subject;
-import com.valentinakole.lms.util.validate.ValidationMessage;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
@@ -20,6 +19,10 @@ import org.hibernate.validator.constraints.URL;
 
 import java.time.LocalTime;
 
+import static com.valentinakole.lms.util.validate.ValidationMessage.INCORRECT_JSON_OBJECT;
+import static com.valentinakole.lms.util.validate.ValidationMessage.INCORRECT_SUBJECT;
+import static com.valentinakole.lms.util.validate.ValidationMessage.PROGRESS_MESSAGE;
+
 @Builder
 @Getter
 @Setter
@@ -29,7 +32,7 @@ import java.time.LocalTime;
 @Schema(description = "Сущность 'Урок' (создание/редактирование)")
 public class LessonCreateDto {
 
-    @NotNull(message = ValidationMessage.VALIDATION_INCORRECT_SUBJECT)
+    @NotNull(message = INCORRECT_SUBJECT)
     private Subject subject;
 
     @NotBlank(message = "Тема урока обязательна для заполнения")
@@ -37,7 +40,7 @@ public class LessonCreateDto {
     @Size(max = 500, message = "Тема урока должна быть не больше 500 знаков")
     private String topic;
 
-    @Pattern(message = ValidationMessage.VALIDATION_INCORRECT_JSON_OBJECT, regexp = "\\d{4}-\\d{2}-\\d{2}")
+    @Pattern(message = INCORRECT_JSON_OBJECT, regexp = "\\d{4}-\\d{2}-\\d{2}")
     @NotBlank(message = "Дата урока обязательна для заполнения")
     @Schema(description = "Дата урока", example = "2023-09-14")
     private String date;
@@ -67,9 +70,9 @@ public class LessonCreateDto {
     @Schema(description = "Ссылка на домашнюю работу к уроку", example = "https://habr.com/ru/homeworkUrl.htm")
     private String homeworkUrl;
 
-    @PositiveOrZero(message = ValidationMessage.VALIDATION_PROGRESS_MESSAGE)
+    @PositiveOrZero(message = PROGRESS_MESSAGE)
     @Schema(description = "Прогресс выполнения в % от 1 до 100", example = "10")
-    @Max(value = 100, message = ValidationMessage.VALIDATION_PROGRESS_MESSAGE)
+    @Max(value = 100, message = PROGRESS_MESSAGE)
     private Integer progress;
 
     @Schema(description = "Отметка о выполнении урока", example = "false")

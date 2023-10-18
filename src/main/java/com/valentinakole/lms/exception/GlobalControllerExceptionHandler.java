@@ -4,7 +4,6 @@ import com.valentinakole.lms.exception.errors.BadRequestError;
 import com.valentinakole.lms.exception.errors.BadRequestException;
 import com.valentinakole.lms.exception.errors.EmailExistError;
 import com.valentinakole.lms.exception.errors.NotFoundException;
-import com.valentinakole.lms.util.validate.ValidationMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
@@ -19,6 +18,8 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 
+import static com.valentinakole.lms.util.validate.ValidationMessage.INCORRECT_JSON_OBJECT;
+
 @RestControllerAdvice
 @Slf4j
 public class GlobalControllerExceptionHandler {
@@ -30,7 +31,7 @@ public class GlobalControllerExceptionHandler {
 
     @ExceptionHandler({HttpMessageNotReadableException.class, DateTimeParseException.class})
     private ResponseEntity<ApiError> handelHttpMessageNotReadableException() {
-        return getResponseError(ValidationMessage.VALIDATION_INCORRECT_JSON_OBJECT,
+        return getResponseError(INCORRECT_JSON_OBJECT,
                 HttpStatus.BAD_REQUEST);
     }
 
