@@ -1,5 +1,11 @@
-# Групповой пет-проект lms
-Проект закрыт 
+# Групповой пет-проект lms - Проект закрыт
+## Мини-lms система для родителей, которые организуют семейное обучение детей дома
+Скрины реализованного приложения бэк(Java)+фронт(React)
+
+<div align="center"><img width="800" src="https://github.com/valentina810/lms/blob/main/img/1.png"></div>
+<div align="center"><img width="800" src="https://github.com/valentina810/lms/blob/main/img/2.png"></div>
+<div align="center"><img width="800" src="https://github.com/valentina810/lms/blob/main/img/3.png"></div>
+<div align="center"><img width="800" src="https://github.com/valentina810/lms/blob/main/img/4.png"></div>
 
 ## Участники команды
 
@@ -42,9 +48,7 @@ https://www.figma.com/file/V7PLGct4lGmFJofvvbgxkw/LMS-(Copy)?type=design&node-id
 
 ## Схема БД
 
-![Схема базы данных](https://github.com/Valentina810/lms/blob/main/schema.png)
-
-## Мини-lms система для родителей, которые организуют семейное обучение детей дома
+![Схема базы данных](https://github.com/Valentina810/lms/blob/main/img/schema.png)
 
 Первоначальный MVP не предусматривает регистрацию пользователей.
 Считаем что пользователь уже зарегистрирован. В таблице Users хранятся данные о пользователе: логин, пароль и токен.
@@ -590,3 +594,18 @@ Content-Type : application/json
 - в логине пользователя ограничить символы: можно использовать только английские буквы и цифры
 - добавить сохранение логов на сервере в файл (бэкенд)
 - реализовать обновление сущностей с помощью PATCH запросов в случае если приходит от одного до полного количества полей объекта (и для пользователя и для урока)
+
+
+curl -X 'POST' \
+'http://localhost:8080/users' \
+-H 'accept: */*' \
+-H 'Content-Type: application/json' \
+-d '{
+"name": "Ирина",
+"surname": "Савельева",
+"login": "irinasav",
+"password": "TY89*tQW!k",
+"email": "irinasav@yandex.ru",
+"dateBirth": "2000-09-14",
+"avatarUrl": "https://habr.com/ru/irinasav.jpg"
+}'
